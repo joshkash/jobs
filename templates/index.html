@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>דרושים במשפט</title>
+<meta name="description" content="כל המשרות המשפטיות בישראל במקום אחד: עורכי דין, מתמחים, סטודנטים, יועצים משפטיים ומזכירות משפטית. מתעדכן כל יום.">
+<meta property="og:title" content="דרושים במשפט">
+<meta property="og:description" content="{{ total }} משרות משפטיות בישראל, מתעדכן כל יום.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@400;600;700&display=swap">
+<style>
+/* Layout: a court-docket ledger. Masthead, filter rail, then one column of numbered cases. */
+:root {
+  --paper: #f6f7f4; --sheet: #ffffff; --ink: #1b2430; --muted: #5d6673; --rule: #d9ddd6;
+  --seal: #7a2331; --seal-soft: #f3e6e8; --fresh: #2f6b3f; --fresh-soft: #e4efe6;
+  --warn: #8a5a12; --warn-soft: #f6ecd9;
+  --display: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+  --body: "Assistant", "Arial Hebrew", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14181e; --sheet: #1c222a; --ink: #e8eaed; --muted: #9aa3ad; --rule: #2e3640;
+    --seal: #e48a97; --seal-soft: #3a2228; --fresh: #8fcf9e; --fresh-soft: #1f3226;
+    --warn: #e5b866; --warn-soft: #3a2f1c; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55;
+  padding: 0 max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px));
+}
+.wrap { max-width: 900px; margin: 0 auto; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--seal); outline-offset: 2px; }
+
+header { padding-block: 40px 24px; border-bottom: 3px double var(--ink); display: grid; gap: 8px; }
+.eyebrow { font-size: 13px; letter-spacing: .04em; color: var(--seal); font-weight: 700; }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(36px, 7vw, 56px); line-height: 1.05; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); margin: 0; max-width: 62ch; }
+.meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.roles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; padding-block: 20px 4px; }
+.role { font: inherit; text-align: start; padding: 10px 12px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); border-radius: 6px; cursor: pointer; display: grid; gap: 2px; }
+.role b { font-family: var(--display); font-size: 24px; line-height: 1; font-variant-numeric: tabular-nums; }
+.role span { font-size: 13px; color: var(--muted); }
+.role[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.role[aria-pressed="true"] span { color: var(--paper); opacity: .8; }
+
+.filters { display: grid; gap: 12px; padding-block: 12px 20px; border-bottom: 1px solid var(--rule); }
+.search { width: 100%; font: inherit; padding: 10px 14px; border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet); color: var(--ink); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { font: inherit; font-size: 14px; padding: 5px 12px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); border-radius: 999px; cursor: pointer; max-width: 100%; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.count { font-size: 14px; color: var(--muted); padding-block: 14px 4px; }
+.job { display: grid; grid-template-columns: 64px 1fr; gap: 0 16px; padding-block: 20px; border-bottom: 1px solid var(--rule); }
+.docket { font-family: var(--display); font-weight: 700; font-size: 13px; color: var(--muted); padding-top: 6px; font-variant-numeric: tabular-nums; }
+.job-body { min-width: 0; display: grid; gap: 6px; }
+.job-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.job h2 { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.3; margin: 0; overflow-wrap: anywhere; }
+.employer { color: var(--muted); font-size: 15px; }
+.excerpt { margin: 0; max-width: 68ch; overflow-wrap: anywhere; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; font-size: 13px; }
+.tag { padding: 2px 8px; border-radius: 4px; background: var(--paper); border: 1px solid var(--rule); }
+.tag.role-tag { background: var(--seal-soft); border-color: transparent; color: var(--seal); font-weight: 600; }
+.tag.fresh { background: var(--fresh-soft); border-color: transparent; color: var(--fresh); font-weight: 600; }
+.tag.stale { background: var(--warn-soft); border-color: transparent; color: var(--warn); font-weight: 600; }
+.job-foot { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 14px; }
+.open { color: var(--seal); font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
+.src { color: var(--muted); font-size: 13px; }
+.star { font: inherit; background: none; border: 1px solid var(--rule); color: var(--muted); border-radius: 6px; padding: 4px 10px; cursor: pointer; white-space: nowrap; font-size: 13px; }
+.star[aria-pressed="true"] { color: var(--seal); border-color: var(--seal); font-weight: 700; }
+.empty { padding: 32px 0; color: var(--muted); }
+.more { font: inherit; margin-top: 20px; padding: 10px 18px; border: 1px solid var(--ink); background: var(--sheet); color: var(--ink); border-radius: 6px; cursor: pointer; font-weight: 700; }
+
+section.sources { margin-top: 40px; display: grid; gap: 12px; }
+section.sources h3 { font-family: var(--display); font-size: 22px; margin: 0; }
+.src-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.src-list li { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
+.src-list a { font-weight: 700; text-decoration: none; }
+.note { font-size: 13px; color: var(--muted); max-width: 68ch; margin: 0; }
+
+@media (max-width: 560px) {
+  .job { grid-template-columns: 1fr; }
+  .docket { padding-top: 0; }
+  .job-head { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">עורכי דין · מתמחים · סטודנטים · יועצים משפטיים · מזכירות משפטית</div>
+    <h1>דרושים במשפט</h1>
+    <p class="lede">כל המשרות המשפטיות בישראל מלוחות הדרושים ומלשכת עורכי הדין, במקום אחד. הרשימה מתעדכנת אוטומטית כל בוקר. כל מודעה מקשרת למקור, ושם מגישים מועמדות.</p>
+    <div class="meta"><span>עודכן: <b id="updated">{{ updated }}</b></span><span><b>{{ total }}</b> משרות פתוחות</span><span><b id="savedCount">0</b> שמורות אצלך</span></div>
+  </header>
+
+  <div class="roles" id="roles" role="group" aria-label="סוג תפקיד"></div>
+
+  <div class="filters">
+    <input id="q" class="search" type="search" placeholder="חיפוש חופשי: משרד, עיר, תחום, למשל ״נדל״ן תל אביב״" aria-label="חיפוש">
+    <div class="row">
+      <select id="city" class="chip" aria-label="עיר"><option value="">כל הערים</option></select>
+      <select id="area" class="chip" aria-label="תחום משפטי"><option value="">כל התחומים</option></select>
+      <select id="source" class="chip" aria-label="מקור"><option value="">כל המקורות</option></select>
+    </div>
+    <div class="row">
+      <button class="chip" id="noExp" aria-pressed="false">ללא ניסיון</button>
+      <button class="chip" id="partTime" aria-pressed="false">משרה חלקית</button>
+      <button class="chip" id="fresh" aria-pressed="false">פורסם ב־14 הימים האחרונים</button>
+      <button class="chip" id="savedOnly" aria-pressed="false">רק שמורות</button>
+    </div>
+  </div>
+
+  <div class="count" id="count" aria-live="polite"></div>
+  <div id="list"><div class="empty">טוען משרות…</div></div>
+  <button class="more" id="more" hidden>הצג עוד משרות</button>
+
+  <section class="sources">
+    <h3>מקורות</h3>
+    <p class="note">המשרות נאספות אוטומטית מהלוחות האלה. מודעות שהוסרו מהמקור יורדות מכאן ביום שאחרי. כשאין למודעה תאריך פרסום, מוצג התאריך שבו ראינו אותה לראשונה.</p>
+    <ul class="src-list">
+      {% for b in boards %}<li><a href="{{ b.url }}" target="_blank" rel="noopener">{{ b.name }}</a></li>{% endfor %}
+    </ul>
+  </section>
+</div>
+
+<script id="data" type="application/json">{{ payload|tojson }}</script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById("data").textContent);
+  var jobs = data.jobs;
+  var ROLE_NAMES = {}; data.roles.forEach(function (r) { ROLE_NAMES[r[0]] = r[1]; });
+  var PAGE = 40;
+  if (data.updated) document.getElementById("updated").textContent = data.updated.split("-").reverse().join(".");
+  var state = { role: "", city: "", area: "", source: "", q: "", noExp: false, partTime: false, fresh: false, savedOnly: false, shown: PAGE };
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem("legaljobs-saved") || "{}") || {}; } catch (e) { saved = {}; }
+  function persist() { try { localStorage.setItem("legaljobs-saved", JSON.stringify(saved)); } catch (e) {} }
+
+  var TODAY = new Date(); TODAY.setHours(0, 0, 0, 0);
+  function daysAgo(iso) { return Math.max(0, Math.round((TODAY - new Date(iso + "T00:00:00")) / 86400000)); }
+  function fmtDate(iso) { var p = iso.split("-"); return p[2] + "." + p[1] + "." + p[0].slice(2); }
+  function ageLabel(n) {
+    if (n === 0) return "היום"; if (n === 1) return "אתמול";
+    if (n < 30) return "לפני " + n + " ימים";
+    var m = Math.round(n / 30); return m === 1 ? "לפני חודש" : "לפני " + m + " חודשים";
+  }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function uniq(list) { return Array.from(new Set(list)).sort(function (a, b) { return a.localeCompare(b, "he"); }); }
+  function fill(id, values) { var s = document.getElementById(id); values.forEach(function (v) { var o = el("option", null, v); o.value = v; s.appendChild(o); }); }
+
+  fill("city", uniq([].concat.apply([], jobs.map(function (j) { return j.cities; }))));
+  fill("area", uniq([].concat.apply([], jobs.map(function (j) { return j.areas; }))));
+  fill("source", uniq(jobs.map(function (j) { return j.source; })));
+
+  var rolesBox = document.getElementById("roles");
+  [["", "כל המשרות"]].concat(data.roles).forEach(function (r) {
+    var n = r[0] ? jobs.filter(function (j) { return j.roles.indexOf(r[0]) > -1; }).length : jobs.length;
+    if (r[0] && !n) return;
+    var b = el("button", "role"); b.setAttribute("aria-pressed", r[0] === "" ? "true" : "false");
+    b.appendChild(el("b", null, n)); b.appendChild(el("span", null, r[1]));
+    b.addEventListener("click", function () {
+      state.role = r[0]; state.shown = PAGE;
+      rolesBox.querySelectorAll(".role").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      render();
+    });
+    rolesBox.appendChild(b);
+  });
+
+  function matches(j) {
+    if (state.role && j.roles.indexOf(state.role) === -1) return false;
+    if (state.city && j.cities.indexOf(state.city) === -1) return false;
+    if (state.area && j.areas.indexOf(state.area) === -1) return false;
+    if (state.source && j.source !== state.source) return false;
+    if (state.savedOnly && !saved[j.id]) return false;
+    if (state.noExp && !/ללא|לא נדרש|0-|0 -/.test(j.experience)) return false;
+    if (state.partTime && !/חלקית/.test(j.scope + " " + j.excerpt)) return false;
+    if (state.fresh && daysAgo(j.posted) > 14) return false;
+    if (state.q) {
+      var hay = [j.title, j.employer, j.cities.join(" "), j.areas.join(" "), j.excerpt, j.source].join(" ");
+      var words = state.q.split(/\s+/);
+      for (var i = 0; i < words.length; i++) if (hay.indexOf(words[i].replace(/["״]/g, "")) === -1 && hay.indexOf(words[i]) === -1) return false;
+    }
+    return true;
+  }
+
+  function card(j, idx) {
+    var art = el("article", "job");
+    art.appendChild(el("div", "docket", "תיק " + String(idx).padStart(3, "0")));
+    var body = el("div", "job-body");
+    var head = el("div", "job-head");
+    var hg = el("div");
+    hg.appendChild(el("h2", null, j.title));
+    var who = [j.employer, j.cities.join(", ")].filter(Boolean).join(" · ");
+    if (who) hg.appendChild(el("div", "employer", who));
+    head.appendChild(hg);
+    var star = el("button", "star", saved[j.id] ? "★ שמור" : "☆ שמירה");
+    star.setAttribute("aria-pressed", saved[j.id] ? "true" : "false");
+    star.addEventListener("click", function () { if (saved[j.id]) delete saved[j.id]; else saved[j.id] = 1; persist(); render(); });
+    head.appendChild(star);
+    body.appendChild(head);
+    if (j.excerpt) body.appendChild(el("p", "excerpt", j.excerpt));
+    var tags = el("div", "tags");
+    j.roles.forEach(function (r) { if (r !== "other") tags.appendChild(el("span", "tag role-tag", ROLE_NAMES[r])); });
+    j.areas.forEach(function (a) { tags.appendChild(el("span", "tag", a)); });
+    if (j.experience) tags.appendChild(el("span", "tag", j.experience));
+    if (j.scope) tags.appendChild(el("span", "tag", j.scope));
+    var a = daysAgo(j.posted);
+    if (j.dated) tags.appendChild(el("span", a <= 14 ? "tag fresh" : (a > 60 ? "tag stale" : "tag"), "פורסם " + ageLabel(a)));
+    else tags.appendChild(el("span", "tag", "בלוח מאז " + fmtDate(j.first_seen)));
+    body.appendChild(tags);
+    var foot = el("div", "job-foot");
+    var link = el("a", "open", "למודעה ולהגשה ←"); link.href = j.url; link.target = "_blank"; link.rel = "noopener";
+    foot.appendChild(link);
+    foot.appendChild(el("span", "src", "מקור: " + j.source + " · " + fmtDate(j.posted)));
+    body.appendChild(foot);
+    art.appendChild(body);
+    return art;
+  }
+
+  function render() {
+    var list = document.getElementById("list"); list.textContent = "";
+    var shown = jobs.filter(matches);
+    document.getElementById("count").textContent = shown.length === jobs.length
+      ? "כל " + jobs.length + " המשרות, החדשות קודם" : shown.length + " משרות מתוך " + jobs.length;
+    document.getElementById("savedCount").textContent = Object.keys(saved).length;
+    if (!shown.length) { list.appendChild(el("div", "empty", "אין משרות שמתאימות לסינון. נסו להסיר מסנן או לחפש מילה אחרת.")); }
+    shown.slice(0, state.shown).forEach(function (j, i) { list.appendChild(card(j, i + 1)); });
+    document.getElementById("more").hidden = shown.length <= state.shown;
+  }
+
+  function toggle(id, key) {
+    var b = document.getElementById(id);
+    b.addEventListener("click", function () { state[key] = !state[key]; state.shown = PAGE; b.setAttribute("aria-pressed", state[key] ? "true" : "false"); render(); });
+  }
+  toggle("noExp", "noExp"); toggle("partTime", "partTime"); toggle("fresh", "fresh"); toggle("savedOnly", "savedOnly");
+  ["city", "area", "source"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", function (e) { state[id] = e.target.value; state.shown = PAGE; render(); });
+  });
+  document.getElementById("q").addEventListener("input", function (e) { state.q = e.target.value.trim(); state.shown = PAGE; render(); });
+  document.getElementById("more").addEventListener("click", function () { state.shown += PAGE; render(); });
+  render();
+})();
+</script>
+</body>
+</html>
