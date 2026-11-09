@@ -65,6 +65,9 @@ def roles_for(title, text):
             found.append("support")
         if found:
             break
+    # ads for other roles that say they are open to law students also count as student jobs
+    if re.search(r"סטודנט\S*\s+(ל)?משפטים|טרום[\s-]?מתמח|קדם[\s-]?מתמח", text):
+        found.append("students")
     return list(dict.fromkeys(found)) or ["other"]
 
 

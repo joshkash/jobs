@@ -19,8 +19,19 @@ session.headers.update({"User-Agent": UA, "Accept-Language": "he-IL,he;q=0.9"})
 
 MERKAZ_URL = "https://merkazbar.org.il/%D7%99%D7%97%D7%99%D7%93%D7%AA-%D7%94%D7%A9%D7%9E%D7%94/%D7%93%D7%A8%D7%95%D7%A9%D7%99%D7%9D/"
 JLM_URL = "https://jerusalembar.org.il/mdrushim/"
-DRUSHIM_URL = "https://www.drushim.co.il/jobs/cat14/"
+DRUSHIM_URLS = [
+    "https://www.drushim.co.il/jobs/cat14/",  # עריכת דין, all roles
+    # legal subcategories: counsel, interns, lawyers, legal secretaries, contracts, law students, enforcement
+    *[f"https://www.drushim.co.il/jobs/subcat/{n}/" for n in (125, 126, 127, 440, 692, 697, 707)],
+]
 MUVTAL_URL = "https://www.muvtal.co.il/jobs?filter_categories=38&page={page}"
+# later result pages require signing in, so only the first page of each search is read
+JOBMASTER_URL = "https://www.jobmaster.co.il/jobs/q-{query}/"
+JOBMASTER_QUERIES = ["סטודנט-למשפטים", "טרום-מתמחה", "מתמחה-משפטים", "עורך-דין", "מזכירה-משפטית", "יועץ-משפטי"]
+MPLOY_URL = "https://www.mploy.co.il/job/tagged/%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98%D7%99%D7%9D-%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D"
+
+# general boards return some non-legal ads; keep an ad only if it mentions law
+LEGAL_WORDS = re.compile(r"משפט|עו[\"״]ד|עור[כך](/?ת)?[\s-]?דין|עורכי[\s-]?דין|מתמח|legal|lawyer|attorney", re.I)
 
 
 def fetch(url, tries=4):
@@ -74,10 +85,13 @@ def first_line_title(lines, max_len=110):
 
 # ---------------------------------------------------------------- Drushim
 def drushim():
-    """The public category page lists only the newest ~25 jobs; daily runs accumulate them."""
+    """Each public category page lists only its newest jobs; daily runs accumulate them."""
     jobs, seen = [], set()
-    s = BeautifulSoup(fetch(DRUSHIM_URL), "html.parser")
-    for c in s.select('article[class*="job-card-module"]'):
+    cards = []
+    for url in DRUSHIM_URLS:
+        cards += BeautifulSoup(fetch(url), "html.parser").select('article[class*="job-card-module"]')
+        time.sleep(1.5)
+    for c in cards:
         a = c.select_one('a[href^="/job/"]')
         if not a:
             continue
@@ -142,6 +156,70 @@ def muvtal(max_pages=15):
     return jobs
 
 
+# ---------------------------------------------------------------- JobMaster
+def jobmaster():
+    jobs, seen = [], set()
+    for query in JOBMASTER_QUERIES:
+        s = BeautifulSoup(fetch(JOBMASTER_URL.format(query=query)), "html.parser")
+        for c in s.select("article.JobItem"):
+            jid = (c.get("id") or "").replace("misra", "")
+            if not jid.isdigit() or jid in seen:
+                continue
+            seen.add(jid)
+            title = c.select_one("a.CardHeader")
+            desc = c.select_one(".jobShortDescription")
+            posted = c.find("span", class_="Gray", string=re.compile("פורסם"))
+            employer = posted.find_next_sibling("span") if posted else None
+            tags = [a.get_text(" ", strip=True) for a in c.select("a:not(.CardHeader)")]
+            text = desc.get_text(" ", strip=True) if desc else ""
+            title_text = title.get_text(" ", strip=True).rstrip(".") if title else "משרה"
+            if not LEGAL_WORDS.search(title_text + " " + text):
+                continue
+            jobs.append({
+                "id": "jobmaster-" + jid,
+                "source": "ג'ובמאסטר",
+                "url": "https://www.jobmaster.co.il/jobs/checknum.asp?key=" + jid,
+                "title": title_text[:110],
+                "employer": employer.get_text(" ", strip=True) if employer else "",
+                "cities": [],
+                "text": text,
+                "posted": relative_date(posted.get_text(" ", strip=True).replace("פורסם", "")) if posted else None,
+                "meta": [t for t in tags if "משרה" in t or "ניסיון" in t],
+            })
+        time.sleep(1.5)
+    return jobs
+
+
+# ---------------------------------------------------------------- mploy (public-sector student jobs)
+def mploy():
+    s = BeautifulSoup(fetch(MPLOY_URL), "html.parser")
+    jobs, seen = [], set()
+    for a in s.find_all("a", href=re.compile(r"job/details/\d+")):
+        jid = re.search(r"details/(\d+)", a["href"]).group(1)
+        if jid in seen:
+            continue
+        seen.add(jid)
+        card = a
+        while card.parent is not None and len(card.get_text(strip=True)) < 80:
+            card = card.parent
+        parts = [p for p in card.get_text("\n", strip=True).split("\n") if p and p != "קרא עוד"]
+        if not LEGAL_WORDS.search(" ".join(parts)):
+            continue
+        when = next((p for p in parts if p.startswith("לפני")), None)
+        jobs.append({
+            "id": "mploy-" + jid,
+            "source": "mploy",
+            "url": "https://www.mploy.co.il/job/details/" + jid,
+            "title": parts[0][:110],
+            "employer": "",
+            "cities": [],
+            "text": " ".join(parts[1:]),
+            "posted": relative_date(when) if when else None,
+            "meta": [],
+        })
+    return jobs
+
+
 # ---------------------------------------------------------------- Bar association, Central district
 def merkaz():
     _, text = soup_text(fetch(MERKAZ_URL))
@@ -202,9 +280,12 @@ def jerusalem():
 
 # complete=True: the scrape sees the board's whole list, so a missing ad means it closed.
 # complete=False: the scrape sees only the newest ads, so older ones expire by age instead.
+# strict=True: a general board; drop ads that match no legal role (guards at "משרד המשפטים", translators...).
 SOURCES = {
     "drushim": {"fn": drushim, "complete": False, "max_age": 45},
     "muvtal": {"fn": muvtal, "complete": True, "max_age": 120},
+    "jobmaster": {"fn": jobmaster, "complete": False, "max_age": 60, "strict": True},
+    "mploy": {"fn": mploy, "complete": False, "max_age": 45, "strict": True},
     "merkaz": {"fn": merkaz, "complete": True, "max_age": 120},
     "jerusalem": {"fn": jerusalem, "complete": True, "max_age": 120},
 }

@@ -25,6 +25,8 @@ MAX_AGE_DAYS = 120
 BOARDS = [
     {"name": "דרושים · עריכת דין", "url": "https://www.drushim.co.il/jobs/cat14/"},
     {"name": "מובטל · חוק ומשפט", "url": "https://www.muvtal.co.il/jobs?filter_categories=38"},
+    {"name": "ג'ובמאסטר · סטודנט למשפטים", "url": "https://www.jobmaster.co.il/jobs/q-%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98-%D7%9C%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D/"},
+    {"name": "mploy · משרות סטודנט בשירות הציבורי", "url": "https://www.mploy.co.il/job/tagged/%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98%D7%99%D7%9D-%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D"},
     {"name": "לשכת עוה״ד מחוז מרכז", "url": "https://merkazbar.org.il/%D7%99%D7%97%D7%99%D7%93%D7%AA-%D7%94%D7%A9%D7%9E%D7%94/%D7%93%D7%A8%D7%95%D7%A9%D7%99%D7%9D/"},
     {"name": "לשכת עוה״ד מחוז ירושלים", "url": "https://jerusalembar.org.il/mdrushim/"},
 ]
@@ -50,6 +52,9 @@ def scrape(store):
         found = set()
         for r in raw:
             job = classify(r)
+            if src.get("strict") and job["roles"] == ["other"]:
+                jobs.pop(job["id"], None)
+                continue
             old = jobs.get(job["id"], {})
             job["first_seen"] = old.get("first_seen", today)
             job["posted"] = job["posted"] or old.get("posted") or job["first_seen"]
