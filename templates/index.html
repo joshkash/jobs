@@ -82,6 +82,7 @@ section.sources h3 { font-family: var(--display); font-size: 22px; margin: 0; }
 .src-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
 .src-list li { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
 .src-list a { font-weight: 700; text-decoration: none; }
+.src-list .note { display: block; margin-top: 2px; }
 .note { font-size: 13px; color: var(--muted); max-width: 68ch; margin: 0; }
 
 @media (max-width: 560px) {
@@ -120,6 +121,14 @@ section.sources h3 { font-family: var(--display); font-size: 22px; margin: 0; }
   <div class="count" id="count" aria-live="polite"></div>
   <div id="list"><div class="empty">טוען משרות…</div></div>
   <button class="more" id="more" hidden>הצג עוד משרות</button>
+
+  <section class="sources">
+    <h3>תוכניות סטודנטים ומתמחים במשרדים הגדולים</h3>
+    <p class="note">המשרדים האלה מגייסים סטודנטים ומתמחים דרך תוכניות קבועות ולא דרך מודעות, ולכן הם לא מופיעים ברשימה למעלה. מגישים ישירות באתר המשרד, ולרוב כשנה לפני מועד ההתחלה.</p>
+    <ul class="src-list">
+      {% for p in programs %}<li><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a><span class="note">{{ p.what }}</span></li>{% endfor %}
+    </ul>
+  </section>
 
   <section class="sources">
     <h3>מקורות</h3>

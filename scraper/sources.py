@@ -3,9 +3,11 @@
 Raw job keys: id, source, url, title, employer, cities (list), text,
 posted (YYYY-MM-DD or None), meta (list of short strings from the board).
 """
+import json
 import re
 import time
 from datetime import date, timedelta
+from urllib.parse import unquote
 
 import requests
 from bs4 import BeautifulSoup
@@ -29,6 +31,12 @@ MUVTAL_URL = "https://www.muvtal.co.il/jobs?filter_categories=38&page={page}"
 JOBMASTER_URL = "https://www.jobmaster.co.il/jobs/q-{query}/"
 JOBMASTER_QUERIES = ["סטודנט-למשפטים", "טרום-מתמחה", "מתמחה-משפטים", "עורך-דין", "מזכירה-משפטית", "יועץ-משפטי"]
 MPLOY_URL = "https://www.mploy.co.il/job/tagged/%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98%D7%99%D7%9D-%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D"
+
+LEGALALPHABET_URL = "https://legalalphabet.com/api/jobs.php?country=IL&limit=100"
+SHIBOLET_URL = "https://www.shibolet.com/careers/"
+EN_CITIES = {"Tel Aviv": "תל אביב", "Jerusalem": "ירושלים", "Haifa": "חיפה", "Petah Tikva": "פתח תקווה",
+             "Ra'anana": "רעננה", "Herzliya": "הרצליה", "Ramat Gan": "רמת גן", "Yokneam": "יקנעם",
+             "Rehovot": "רחובות", "Netanya": "נתניה", "Be'er Sheva": "באר שבע"}
 
 # general boards return some non-legal ads; keep an ad only if it mentions law
 LEGAL_WORDS = re.compile(r"משפט|עו[\"״]ד|עור[כך](/?ת)?[\s-]?דין|עורכי[\s-]?דין|מתמח|legal|lawyer|attorney", re.I)
@@ -278,6 +286,51 @@ def jerusalem():
     return jobs
 
 
+# ---------------------------------------------------------------- LegalAlphabet (public JSON feed)
+def legalalphabet():
+    """LegalAlphabet publishes a free read-only feed and asks to be read through it, not scraped."""
+    data = json.loads(fetch(LEGALALPHABET_URL))
+    jobs = []
+    for x in data.get("jobs") or data.get("results") or []:
+        loc = (x.get("location") or {}).get("display", "")
+        jobs.append({
+            "id": f"la-{x['id']}",
+            "source": "LegalAlphabet",
+            "url": x.get("url") or f"https://legalalphabet.com/{x.get('type', 'job')}/{x.get('slug', x['id'])}",
+            "title": x.get("title", "")[:110],
+            "employer": (x.get("company") or {}).get("name", ""),
+            "cities": [he for en, he in EN_CITIES.items() if en in loc],
+            "text": re.sub(r"\s+", " ", x.get("description") or "")[:600],
+            "posted": (x.get("posted_at") or x.get("date_posted") or "")[:10] or None,
+            "meta": ["עבודה מרחוק"] if (x.get("location") or {}).get("remote") else [],
+        })
+    return jobs
+
+
+# ---------------------------------------------------------------- Shibolet (firm careers page)
+def shibolet():
+    s = BeautifulSoup(fetch(SHIBOLET_URL), "html.parser")
+    jobs = []
+    for a in s.find_all("a", string=lambda t: t and "למידע נוסף" in t):
+        card = a
+        while card.parent is not None and len(card.get_text(strip=True)) < 25:
+            card = card.parent
+        title = card.get_text(" | ", strip=True).split(" | ")[0]
+        href = a.get("href", "")
+        jobs.append({
+            "id": "shibolet-" + re.sub(r"\W+", "-", unquote(href).rstrip("/").rsplit("/", 1)[-1])[:80],
+            "source": "שיבולת עורכי דין",
+            "url": href,
+            "title": title[:110],
+            "employer": "שיבולת ושות׳",
+            "cities": ["תל אביב"],
+            "text": "",
+            "posted": None,
+            "meta": [],
+        })
+    return jobs
+
+
 # complete=True: the scrape sees the board's whole list, so a missing ad means it closed.
 # complete=False: the scrape sees only the newest ads, so older ones expire by age instead.
 # strict=True: a general board; drop ads that match no legal role (guards at "משרד המשפטים", translators...).
@@ -288,4 +341,6 @@ SOURCES = {
     "mploy": {"fn": mploy, "complete": False, "max_age": 45, "strict": True},
     "merkaz": {"fn": merkaz, "complete": True, "max_age": 120},
     "jerusalem": {"fn": jerusalem, "complete": True, "max_age": 120},
+    "legalalphabet": {"fn": legalalphabet, "complete": True, "max_age": 120, "strict": True},
+    "shibolet": {"fn": shibolet, "complete": True, "max_age": 365},
 }

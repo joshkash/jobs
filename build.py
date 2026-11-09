@@ -29,6 +29,18 @@ BOARDS = [
     {"name": "mploy · משרות סטודנט בשירות הציבורי", "url": "https://www.mploy.co.il/job/tagged/%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98%D7%99%D7%9D-%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D"},
     {"name": "לשכת עוה״ד מחוז מרכז", "url": "https://merkazbar.org.il/%D7%99%D7%97%D7%99%D7%93%D7%AA-%D7%94%D7%A9%D7%9E%D7%94/%D7%93%D7%A8%D7%95%D7%A9%D7%99%D7%9D/"},
     {"name": "לשכת עוה״ד מחוז ירושלים", "url": "https://jerusalembar.org.il/mdrushim/"},
+    {"name": "שיבולת · משרות פתוחות", "url": "https://www.shibolet.com/careers/"},
+    {"name": "LegalAlphabet · Israel", "url": "https://legalalphabet.com/israel/jobs"},
+]
+
+# Big firms that recruit students and interns through standing programs rather than dated ads.
+PROGRAMS = [
+    {"name": "גורניצקי", "what": "תוכנית מתמחים, פתוחה לסטודנטים", "url": "https://www.gornitzky.com/career-legal-interns/"},
+    {"name": "גולדפרב גרוס זליגמן", "what": "מתמחים וסטודנטים", "url": "https://www.goldfarb.com/he/interns/"},
+    {"name": "מיתר", "what": "משרות פתוחות ומתמחים", "url": "https://meitar.com/careers/"},
+    {"name": "הרצוג פוקס נאמן", "what": "קריירה והגשת קורות חיים", "url": "https://herzoglaw.co.il/en/careers/"},
+    {"name": "ברנע ג׳פה לנדה", "what": "התמחות", "url": "https://barlaw.co.il/internship/"},
+    {"name": "שיבולת", "what": "מתמחים", "url": "https://www.shibolet.com/%d7%94%d7%97%d7%99%d7%99%d7%9d-%d7%91%d7%a9%d7%91%d7%9c%d7%aa/%d7%9e%d7%aa%d7%9e%d7%97%d7%99%d7%9d-%d7%91%d7%a9%d7%91%d7%9c%d7%aa/"},
 ]
 
 
@@ -80,6 +92,7 @@ def build(store):
     html = env.get_template("index.html").render(
         payload={"updated": store["updated"], "jobs": jobs, "roles": ROLES},
         boards=BOARDS,
+        programs=PROGRAMS,
         total=len(jobs),
         updated=store["updated"],
     )

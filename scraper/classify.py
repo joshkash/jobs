@@ -52,16 +52,16 @@ def roles_for(title, text):
     found = []
     for scope in (title, text[:260]):
         t = OFFICE_PHRASES.sub(" ", scope)
-        if re.search(r"סטודנט|טרום[\s-]?מתמח|קדם[\s-]?מתמח", t):
+        if re.search(r"סטודנט|טרום[\s-]?מתמח|קדם[\s-]?מתמח|law student|student position", t, re.I):
             found.append("students")
-        if re.search(r"(?<!טרום )(?<!טרום-)(?<!קדם )מתמח", t):
+        if re.search(r"(?<!טרום )(?<!טרום-)(?<!קדם )מתמח|legal intern|staj", t, re.I):
             found.append("interns")
-        if re.search(r"עו[\"״]ד|עור[כך](/?ת)?[\s-]?דין|עורכי(/ות)?[\s-]?דין|lawyer|attorney", t, re.I):
+        if re.search(r"עו[\"״]ד|עור[כך](/?ת)?[\s-]?דין|עורכי(/ות)?[\s-]?דין|lawyer|attorney|associate", t, re.I):
             found.append("lawyers")
-        if re.search(r"יוע[צץ](/?ת)? משפטי|יועמ[\"״]ש|legal counsel", t, re.I):
+        if re.search(r"יוע[צץ](/?ת)? משפטי|יועמ[\"״]ש|counsel|general counsel|legal advisor", t, re.I):
             found.append("counsel")
-        if re.search(r"מזכיר|פרלגל|פרליגל|paralegal|מנהל(/?ת)? משרד|עוזר(/?ת)? משפטי|עוזרת משפטית|קלדנ|"
-                     r"רכז(/?ת)? (משפטי|גבי)|בק אופיס|back office|פקיד|נציג|אדמיניסטר|מחתים|גבי(י)?ה", t, re.I):
+        if re.search(r"מזכיר|פרלגל|פרליגל|paralegal|legal assistant|legal operations|מנהל(/?ת)? משרד|עוזר(/?ת)? משפטי|"
+                     r"עוזרת משפטית|קלדנ|רכז(/?ת)? (משפטי|גבי|צוות)|בק אופיס|back office|פקיד|נציג|אדמיניסטר|מחתים|גבי(י)?ה", t, re.I):
             found.append("support")
         if found:
             break

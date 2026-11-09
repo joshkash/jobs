@@ -6323,13 +6323,490 @@
    "first_seen": "2026-11-09",
    "dated": false,
    "board": "mploy"
+  },
+  "drushim-38831975": {
+   "id": "drushim-38831975",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/38831975/b5d876e2/",
+   "title": "חסוי מזכירה למשרד עורכי דין - שכר גבוה גם ללא ניסיון!! חסוי",
+   "employer": "חסוי",
+   "cities": [
+    "תל אביב",
+    "רמת גן",
+    "גבעתיים",
+    "פתח תקווה"
+   ],
+   "roles": [
+    "support"
+   ],
+   "areas": [],
+   "experience": "ללא נסיון",
+   "scope": "משרה מלאה",
+   "excerpt": "משרד עורכי דין בוטיק בתל אביב מגייס מזכירה לניהול המשרד! 8,000-10,000 ₪, א'-ה' 09:00-18:30 עם גמישות קלה, ואין צורך בניסיון קודם!! תיאור התפקיד: - אדמיניסטרציה שוטפת וניהול המשרד - מענה טלפוני, ניהול יומנים ותיאום פגישות - תכתובות, תיוק וארגון מסמכים - קבלת…",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-38963493": {
+   "id": "drushim-38963493",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/38963493/1a5270c1/",
+   "title": "עו\"ד למחלקת נזיקין (פלת\"ד וחבויות) במשרד מצליח פייל ושות משרד עורכי דין",
+   "employer": "פייל ושות משרד עורכי דין",
+   "cities": [
+    "רמת גן"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [
+    "נזיקין ונזקי גוף",
+    "ביטוח",
+    "מסחרי וחברות"
+   ],
+   "experience": "1-2 שנים",
+   "scope": "משרה מלאה",
+   "excerpt": "ניהול הטיפול בלקוחות מקצה לקצה טיפול בכל הפרוצדורות תוך דאגה לאינטרס הלקוח עד לקבלת הפיצוי מעבר על חוות דעת רפואיות, ליווי ביורוקרטי, הנחיה במילוי טפסים ניהול משא ומתן מול חברות ביטוח ומשרדי עו\"ד ייצוג בבית הדין ובוועדות השונות.",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-39015876": {
+   "id": "drushim-39015876",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/39015876/f4b645fc/",
+   "title": "למשרד עו\"ד בבני ברק דרוש/ה מזכיר/ה קודקס מערכות",
+   "employer": "קודקס מערכות",
+   "cities": [
+    "בני ברק"
+   ],
+   "roles": [
+    "support"
+   ],
+   "areas": [],
+   "experience": "1-2 שנים",
+   "scope": "משרה מלאה",
+   "excerpt": "למשרד עו\"ד בבני ברק דרוש/ה מזכיר/ה העבודה בימים א'- ה' בין השעות08:00-17:00 08:00-15:00 יום קצר 09:00-19:00 יום ארוך ניהול יומנים ותיאום פגישות מרובות משתתפים. טיפול במשימות אדמיניסטרטיביות באופן עצמאי. עבודה בצוות לצד מזכירות נוספות. מתן תמיכה אדמיניסטרטיבית…",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-38935278": {
+   "id": "drushim-38935278",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/38935278/0add0833/",
+   "title": "ק מזכיר\\ה - למשרד עורכי דין ותיק קרמר שפירא שניידר",
+   "employer": "קרמר שפירא שניידר",
+   "cities": [
+    "ירושלים"
+   ],
+   "roles": [
+    "support"
+   ],
+   "areas": [],
+   "experience": "1-2 שנים",
+   "scope": "משרה מלאה",
+   "excerpt": "למשרד עורכי דין ותיק בירושלים דרוש/ה מזכיר/ה. העבודה כוללת קבלת קהל ומענה לטלפונים, תיאום פגישות, קלדנות, תיוקים, עבודה מול מערכת נט המשפט וכל סיוע בתחום המשרדי",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-38779440": {
+   "id": "drushim-38779440",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/38779440/b03f2973/",
+   "title": "דרוש/ה עורך/ת דין למחלקת מכרזים שלג לבן בע\"מ",
+   "employer": "שלג לבן בע\"מ",
+   "cities": [
+    "נתניה"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [],
+   "experience": "1-2 שנים",
+   "scope": "משרה מלאה",
+   "excerpt": "למחלקת המכרזים של חברת שלג לבן דרוש/ה עורך/ת דין בעל/ת חשיבה חדה ויכולת ניתוח מעמיקה, תיאור התפקיד: -קריאה וניתוח מעמיק של מכרזים ציבוריים ופרטיים. -איתור סעיפים מגבילים, סותרים או בלתי סבירים במסמכים. -מתן חוות דעת משפטיות והמלצות אסטרטגיות להנהלה. -ליווי…",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-38851222": {
+   "id": "drushim-38851222",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/38851222/d16bdaea/",
+   "title": "ח דרוש/ה תומך/ת Back Office משפטי / עו״ד צעיר/ה חומי ניהול נכסים ויזמות בע\"מ",
+   "employer": "חומי ניהול נכסים ויזמות בע\"מ",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "lawyers",
+    "support"
+   ],
+   "areas": [
+    "מסחרי וחברות"
+   ],
+   "experience": "1-2 שנים",
+   "scope": "משרה מלאה",
+   "excerpt": "דרוש/ה Back Office משפטי / עו״ד צעיר/ה למחלקת ניהול נכסים אנחנו בחומי ניהול נכסים מחפשים לצרף לצוות שלנו עו\"ד צעיר/ה, בוגר/ת משפטים או מועמד/ת בעל/ת רקע משפטי, לתפקיד המשלב עבודה אדמיניסטרטיבית ומשפטית בתחום החוזים וניהול הנכסים. מדובר בתפקיד מגוון ודינמי, עם…",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-38835433": {
+   "id": "drushim-38835433",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/38835433/5eb40aab/",
+   "title": "חסוי דרוש/ה פקיד/ת בק אופיס למחלקת הכספים - חסוי -",
+   "employer": "- חסוי -",
+   "cities": [
+    "נתניה"
+   ],
+   "roles": [
+    "support"
+   ],
+   "areas": [],
+   "experience": "1-2 שנים",
+   "scope": "משרה מלאה",
+   "excerpt": "מחפשים תפקיד מעניין בסביבה מקצועית ויציבה? מקומכם איתנו! למשרד עורכי דין מוביל בנתניה דרוש/ה פקיד/ת בק אופיס למחלקת הכספים, להשתלבות בצוות מקצועי ואיכותי. אין צורך בניסיון קודם – הכשרה תינתן במסגרת התפקיד! מה כולל התפקיד? הפקת דפי חשבון וביצוע מעקב ובקרה…",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-38741155": {
+   "id": "drushim-38741155",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/38741155/f863f478/",
+   "title": "ס מזכיר/ה למשרה מלאה ברמת החייל - ללא ימי שישי ! סיגל פעיל ושות",
+   "employer": "סיגל פעיל ושות",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "support"
+   ],
+   "areas": [
+    "דיני עבודה"
+   ],
+   "experience": "ללא נסיון",
+   "scope": "משרה מלאה",
+   "excerpt": "למשרד עו\"ד המתמחה בדיני עבודה, דרוש/ה מזכיר/ה אחראי/ת, מנוס/ה, חרוץ/ה ויסודי/ת. לעבודה בימים א'-ה' במשרה מלאה/חלקית בסביבת עבודה נעימה, משפחתית ומפרגנת. משרה קבועה לטווח ארוך. המשרד ממוקם ברמת החייל, תל אביב.",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "drushim-39031304": {
+   "id": "drushim-39031304",
+   "source": "דרושים",
+   "url": "https://www.drushim.co.il/job/39031304/ac7ed5da/",
+   "title": "א דרוש/ה מתמחה או טרום מתמחה למשרד עורכי דין אליוב גרין משרד עורכי דין",
+   "employer": "אליוב גרין משרד עורכי דין",
+   "cities": [
+    "פתח תקווה"
+   ],
+   "roles": [
+    "students",
+    "interns"
+   ],
+   "areas": [
+    "נדל״ן ומקרקעין",
+    "ליטיגציה",
+    "מסחרי וחברות"
+   ],
+   "experience": "ללא נסיון",
+   "scope": "משרה חלקית",
+   "excerpt": "דרוש/ה טרום-מתמחה (שנה ב' או ג') למשרד בוטיק מוביל בפתח תקווה למשרד עורכי דין משפחתי ודינמי בפתח תקווה דרוש/ה טרום-מתמחה (שנה ב' או ג') לחצי משרה. התפקיד מהווה הזדמנות מצוינת להשתלב בעשייה משפטית מרתקת, לצבור ניסיון מעשי ולהכיר את עולם המשפט מקרוב, עם אופציה…",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "drushim"
+  },
+  "la-64877": {
+   "id": "la-64877",
+   "source": "LegalAlphabet",
+   "url": "https://legalalphabet.com/job/product-ai-and-data-protection-counsel-job-at-wiz-in-tel-aviv",
+   "title": "Product, AI & Data Protection Counsel",
+   "employer": "Wiz",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "counsel"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "Come join the organization that is redefining security for the AI era. As one of the fastest-growing startups ever, we enable teams to secure cloud and AI applications by connecting code, cloud, and runtime into a single shared context. Trusted by security…",
+   "posted": "2026-11-02",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "legalalphabet"
+  },
+  "la-64299": {
+   "id": "la-64299",
+   "source": "LegalAlphabet",
+   "url": "https://legalalphabet.com/job/personal-injury-paralegal-job-at-jobgether-in-israel",
+   "title": "Personal Injury Paralegal",
+   "employer": "Jobgether",
+   "cities": [],
+   "roles": [
+    "support"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "This position is listed on behalf of a partner company, who manages all applications and next steps. Our partner is looking for a Personal Injury Paralegal based in Israel. Join a fully remote legal support team working with a U.S. law firm focused on…",
+   "posted": "2026-10-28",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "legalalphabet"
+  },
+  "la-64350": {
+   "id": "la-64350",
+   "source": "LegalAlphabet",
+   "url": "https://legalalphabet.com/job/product-compliance-counsel-job-at-jobgether-in-israel-1",
+   "title": "Product Compliance Counsel",
+   "employer": "Jobgether",
+   "cities": [],
+   "roles": [
+    "counsel"
+   ],
+   "areas": [
+    "הייטק וטכנולוגיה"
+   ],
+   "experience": "",
+   "scope": "",
+   "excerpt": "This position is listed on behalf of a partner company, who manages all applications and next steps. Our partner is looking for a Product Compliance Counsel based in Israel. Join an international, remote-first organization developing innovative digital…",
+   "posted": "2026-10-28",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "legalalphabet"
+  },
+  "la-64113": {
+   "id": "la-64113",
+   "source": "LegalAlphabet",
+   "url": "https://legalalphabet.com/job/senior-corporate-counsel-job-at-jobgether-in-israel",
+   "title": "Senior Corporate Counsel",
+   "employer": "Jobgether",
+   "cities": [],
+   "roles": [
+    "counsel"
+   ],
+   "areas": [
+    "הייטק וטכנולוגיה"
+   ],
+   "experience": "",
+   "scope": "",
+   "excerpt": "This position is listed on behalf of a partner company, who manages all applications and next steps. Our partner is looking for a Senior Corporate Counsel based in Israel. This is an exciting opportunity for an experienced legal professional to shape…",
+   "posted": "2026-10-27",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "legalalphabet"
+  },
+  "la-60547": {
+   "id": "la-60547",
+   "source": "LegalAlphabet",
+   "url": "https://legalalphabet.com/job/legal-counsel-job-at-jobgether-in-israel",
+   "title": "Legal Counsel",
+   "employer": "Jobgether",
+   "cities": [],
+   "roles": [
+    "counsel"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "This position is listed on behalf of a partner company, who manages all applications and next steps. Our partner is looking for a Legal Counsel based in Israel. As Legal Counsel, you will provide hands-on legal support across corporate, commercial,…",
+   "posted": "2026-09-26",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "legalalphabet"
+  },
+  "la-57379": {
+   "id": "la-57379",
+   "source": "LegalAlphabet",
+   "url": "https://legalalphabet.com/job/senior-u-s-securities-and-transactional-counsel-job-at-nebius-in-tel-aviv",
+   "title": "Senior U.S Securities and Transactional Counsel",
+   "employer": "Nebius",
+   "cities": [],
+   "roles": [
+    "counsel"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "About Nebius: Nebius is leading a new era in cloud infrastructure for the global AI economy. We are building a full-stack AI cloud platform that supports developers and enterprises from data and model training through to production deployment, without the…",
+   "posted": "2026-09-01",
+   "first_seen": "2026-11-09",
+   "dated": true,
+   "board": "legalalphabet"
+  },
+  "shibolet-עוד-מתחיל-למחלקת-הנדלן": {
+   "id": "shibolet-עוד-מתחיל-למחלקת-הנדלן",
+   "source": "שיבולת עורכי דין",
+   "url": "https://www.shibolet.com/careers/%d7%a2%d7%95%d7%93-%d7%9e%d7%aa%d7%97%d7%99%d7%9c-%d7%9c%d7%9e%d7%97%d7%9c%d7%a7%d7%aa-%d7%94%d7%a0%d7%93%d7%9c%d7%9f/",
+   "title": "עו\"ד מתחיל למחלקת הנדל\"ן",
+   "employer": "שיבולת ושות׳",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [
+    "נדל״ן ומקרקעין"
+   ],
+   "experience": "",
+   "scope": "",
+   "excerpt": "",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": false,
+   "board": "shibolet"
+  },
+  "shibolet-עוד-בתחום-דיני-עבודה": {
+   "id": "shibolet-עוד-בתחום-דיני-עבודה",
+   "source": "שיבולת עורכי דין",
+   "url": "https://www.shibolet.com/careers/%d7%a2%d7%95%d7%93-%d7%91%d7%aa%d7%97%d7%95%d7%9d-%d7%93%d7%99%d7%a0%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/",
+   "title": "עו\"ד למחלקת דיני עבודה",
+   "employer": "שיבולת ושות׳",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [
+    "דיני עבודה"
+   ],
+   "experience": "",
+   "scope": "",
+   "excerpt": "",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": false,
+   "board": "shibolet"
+  },
+  "shibolet-עוד-למחלקת-רגולציה-פיננסית": {
+   "id": "shibolet-עוד-למחלקת-רגולציה-פיננסית",
+   "source": "שיבולת עורכי דין",
+   "url": "https://www.shibolet.com/careers/%d7%a2%d7%95%d7%93-%d7%9c%d7%9e%d7%97%d7%9c%d7%a7%d7%aa-%d7%a8%d7%92%d7%95%d7%9c%d7%a6%d7%99%d7%94-%d7%a4%d7%99%d7%a0%d7%a0%d7%a1%d7%99%d7%aa/",
+   "title": "עו\"ד למחלקת רגולציה פיננסית",
+   "employer": "שיבולת ושות׳",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": false,
+   "board": "shibolet"
+  },
+  "shibolet-עו-ד-לפרקטיקת-שוק-ההון-3": {
+   "id": "shibolet-עו-ד-לפרקטיקת-שוק-ההון-3",
+   "source": "שיבולת עורכי דין",
+   "url": "https://www.shibolet.com/careers/%d7%a2%d7%95%d7%b4%d7%93-%d7%9c%d7%a4%d7%a8%d7%a7%d7%98%d7%99%d7%a7%d7%aa-%d7%a9%d7%95%d7%a7-%d7%94%d7%94%d7%95%d7%9f-3/",
+   "title": "עו״ד למחלקת שוק ההון",
+   "employer": "שיבולת ושות׳",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": false,
+   "board": "shibolet"
+  },
+  "shibolet-עוד-לתחום-הקורפורייט-מחלקת-היי-טק": {
+   "id": "shibolet-עוד-לתחום-הקורפורייט-מחלקת-היי-טק",
+   "source": "שיבולת עורכי דין",
+   "url": "https://www.shibolet.com/careers/%d7%a2%d7%95%d7%93-%d7%9c%d7%aa%d7%97%d7%95%d7%9d-%d7%94%d7%a7%d7%95%d7%a8%d7%a4%d7%95%d7%a8%d7%99%d7%99%d7%98-%d7%9e%d7%97%d7%9c%d7%a7%d7%aa-%d7%94%d7%99%d7%99-%d7%98%d7%a7/",
+   "title": "עו\"ד לתחום הקורפורייט, מחלקת היי-טק",
+   "employer": "שיבולת ושות׳",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": false,
+   "board": "shibolet"
+  },
+  "shibolet-עוד-מכרזים-תשתיות-מסחרי": {
+   "id": "shibolet-עוד-מכרזים-תשתיות-מסחרי",
+   "source": "שיבולת עורכי דין",
+   "url": "https://www.shibolet.com/careers/%d7%a2%d7%95%d7%93-%d7%9e%d7%9b%d7%a8%d7%96%d7%99%d7%9d-%d7%aa%d7%a9%d7%aa%d7%99%d7%95%d7%aa-%d7%9e%d7%a1%d7%97%d7%a8%d7%99/",
+   "title": "עו\"ד למחלקת המכרזים ותשתיות",
+   "employer": "שיבולת ושות׳",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "lawyers"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": false,
+   "board": "shibolet"
+  },
+  "shibolet-דרוש-ה-רכז-ת-צוות-מזכיר-ת-שותפים": {
+   "id": "shibolet-דרוש-ה-רכז-ת-צוות-מזכיר-ת-שותפים",
+   "source": "שיבולת עורכי דין",
+   "url": "https://www.shibolet.com/careers/%d7%93%d7%a8%d7%95%d7%a9-%d7%94-%d7%a8%d7%9b%d7%96-%d7%aa-%d7%a6%d7%95%d7%95%d7%aa-%d7%9e%d7%96%d7%9b%d7%99%d7%a8-%d7%aa-%d7%a9%d7%95%d7%aa%d7%a4%d7%99%d7%9d/",
+   "title": "רכז.ת צוות – מזכיר.ת שותפים",
+   "employer": "שיבולת ושות׳",
+   "cities": [
+    "תל אביב"
+   ],
+   "roles": [
+    "support"
+   ],
+   "areas": [],
+   "experience": "",
+   "scope": "",
+   "excerpt": "",
+   "posted": "2026-11-09",
+   "first_seen": "2026-11-09",
+   "dated": false,
+   "board": "shibolet"
   }
  },
  "status": {
   "drushim": {
    "ok": true,
    "date": "2026-11-09",
-   "count": 114
+   "count": 107
   },
   "muvtal": {
    "ok": true,
@@ -6355,6 +6832,16 @@
    "ok": true,
    "date": "2026-11-09",
    "count": 1
+  },
+  "legalalphabet": {
+   "ok": true,
+   "date": "2026-11-09",
+   "count": 7
+  },
+  "shibolet": {
+   "ok": true,
+   "date": "2026-11-09",
+   "count": 7
   }
  }
 }
