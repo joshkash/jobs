@@ -136,7 +136,7 @@ footer { padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
 <div class="topbar">
   <div class="wrap">
     <a class="logo" href="#">עבודות <i>לסטודנטים</i></a>
-    <nav class="nav"><a href="#jobs">משרות</a><a href="#facebook">קבוצות פייסבוק</a><a href="#programs">תוכניות סטודנטים</a><a href="#sources">מקורות</a></nav>
+    <nav class="nav"><a href="#jobs">משרות</a><a href="#facebook">קבוצות פייסבוק</a></nav>
   </div>
 </div>
 
@@ -202,22 +202,6 @@ footer { padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
     <p>הרבה משרות סטודנט מתפרסמות רק בקבוצות פייסבוק. פייסבוק לא מאפשר איסוף אוטומטי מקבוצות, ולכן הן לא מופיעות ברשימה למעלה. הקישורים פותחים חיפוש קבוצות בפייסבוק. כדאי להצטרף ולהפעיל התראות.</p>
     <ul class="links">
       {% for f in facebook %}<li><a href="{{ f.url }}" target="_blank" rel="noopener">{{ f.name }}</a><small>חיפוש קבוצות: ״{{ f.q }}״</small></li>{% endfor %}
-    </ul>
-  </section>
-
-  <section class="band" id="programs">
-    <h2>תוכניות סטודנטים במשרדי עורכי הדין הגדולים</h2>
-    <p>המשרדים האלה מגייסים סטודנטים למשפטים ומתמחים דרך תוכניות קבועות ולא דרך מודעות. מגישים באתר המשרד, לרוב כשנה לפני מועד ההתחלה.</p>
-    <ul class="links">
-      {% for p in programs %}<li><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a><small>{{ p.what }}</small></li>{% endfor %}
-    </ul>
-  </section>
-
-  <section class="band" id="sources">
-    <h2>מקורות</h2>
-    <p>המשרות נאספות אוטומטית מהלוחות האלה כל בוקר. מודעה שהוסרה מהמקור יורדת מכאן. כשאין למודעה תאריך פרסום, מוצג התאריך שבו מצאנו אותה לראשונה.</p>
-    <ul class="links">
-      {% for b in boards %}<li><a href="{{ b.url }}" target="_blank" rel="noopener">{{ b.name }}</a></li>{% endfor %}
     </ul>
   </section>
 
