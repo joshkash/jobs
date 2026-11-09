@@ -1,32 +1,25 @@
-"""Turn raw scraped ads into tagged listings: role, practice areas, city, experience."""
+"""Turn raw scraped ads into tagged student listings: field, city, hours, study year."""
 import re
 
-ROLES = [
-    ("students", "סטודנטים וטרום התמחות"),
-    ("interns", "מתמחים"),
-    ("lawyers", "עורכי דין"),
-    ("counsel", "יועצים משפטיים"),
-    ("support", "מזכירות, פרלגל ומנהלה"),
-    ("other", "אחר"),
-]
-
-AREAS = {
-    "נדל״ן ומקרקעין": ["נדל\"ן", "נדל״ן", "מקרקעין", "התחדשות עירונית", "טאבו"],
-    "תכנון ובנייה": ["תכנון ובנייה", "תכנון והבנייה"],
-    "ליטיגציה": ["ליטיגציה", "כתבי טענות", "כתבי בי-דין", "כתבי בי דין"],
-    "נזיקין ונזקי גוף": ["נזיקין", "נזקי גוף", "רשלנות רפואית", "תאונות"],
-    "ביטוח": ["ביטוח"],
-    "משפחה וירושה": ["דיני משפחה", "משפחה", "גירושין", "ירושה", "צוואות"],
-    "פלילי": ["פלילי"],
-    "מסחרי וחברות": ["מסחרי", "חברות", "תאגידי", "הסכמים", "עסקאות"],
-    "הייטק וטכנולוגיה": ["הייטק", "טכנולוגי", "סטארט", "high-tech", "tech"],
-    "קניין רוחני": ["קניין רוחני", "פטנט", "סימני מסחר"],
-    "מיסוי": ["מיסוי", "מסים", "מיסים"],
-    "דיני עבודה": ["דיני עבודה", "יחסי עבודה"],
-    "חדלות פירעון והוצל״פ": ["חדלות פירעון", "הוצאה לפועל", "הוצל\"פ", "הוצל״פ", "גבייה", "גביה", "פשיטת רגל"],
-    "מנהלי וציבורי": ["מנהלי", "רשויות מקומיות", "בג\"ץ", "בג״ץ", "משפט ציבורי"],
-    "ביטוח לאומי וזכויות": ["ביטוח לאומי", "מיצוי זכויות"],
+# Order matters: an ad gets at most two fields, the first ones that match.
+FIELDS = {
+    "הייטק ותוכנה": [r"תוכנה", r"פיתוח", r"מפתח", r"\bQA\b", r"בדיקות תוכנה", r"דאטה", r"\bdata\b", r"\bIT\b",
+                     r"סייבר", r"devops", r"אלגוריתם", r"software", r"developer", r"python", r"full ?stack", r"הייטק"],
+    "הנדסה": [r"הנדס", r"חומרה", r"hardware", r"אדריכל", r"שרטוט", r"מכונות", r"חשמל", r"בנייה", r"אלקטרוניקה"],
+    "כספים וכלכלה": [r"כספים", r"חשבונא", r"הנהלת חשבונות", r"כלכל", r"בנק", r"ביטוח", r"תקציב", r"שוק ההון",
+                      r"פיננס", r"finance", r"ראיית חשבון", r"רואה חשבון", r"\bCPA\b", r"audit", r"ביקורת"],
+    "משפטים": [r"משפט", r"עו[\"״]ד", r"עור[כך](/?ת)?[\s-]?דין", r"עורכי[\s-]?דין", r"מתמח", r"legal", r"lawyer"],
+    "מדעים ומחקר": [r"מחקר", r"מעבדה", r"ביולוג", r"כימי", r"ביוטק", r"מדעי", r"research", r"\blab\b"],
+    "שיווק ומכירות": [r"שיווק", r"מכירות", r"\bsales\b", r"marketing", r"דיגיטל", r"סושיאל", r"קופירייט", r"תוכן"],
+    "שירות לקוחות": [r"שירות לקוחות", r"מוקד", r"נציג", r"טלפוני", r"call center", r"תמיכה"],
+    "אדמיניסטרציה": [r"אדמיניסטר", r"מזכיר", r"פקיד", r"רכז", r"back office", r"בק אופיס", r"הקלדה", r"משאבי אנוש",
+                      r"גיוס", r"\bHR\b", r"קליטה", r"רכש", r"לוגיסטיקה"],
+    "חינוך והדרכה": [r"מורה", r"הוראה", r"חינוך", r"מדריכ", r"הדרכה", r"שיעורים", r"צהרון", r"תגבור", r"חונכ", r"מתרגל"],
+    "בריאות ורווחה": [r"רפוא", r"אחות", r"אחים", r"סיעוד", r"פסיכולוג", r"סוציאל", r"רווחה", r"מטפל", r"בית חולים", r"קליני"],
+    "שירות ציבורי": [r"משרד ה\S+", r"עיריי", r"רשות ה", r"ממשל", r"כנסת", r"מבקר המדינה", r"פרקליטות", r"בית המשפט", r"בתי המשפט"],
+    "מסחר, אירוח ושטח": [r"מלצר", r"קופאי", r"מחסן", r"שליח", r"אבטחה", r"מאבטח", r"מוקדן", r"בריסטה", r"מסעד", r"חנות", r"סדרן"],
 }
+FIELD_PATTERNS = {name: re.compile("|".join(words), re.I) for name, words in FIELDS.items()}
 
 CITIES = [
     "תל אביב", "ירושלים", "חיפה", "רמת גן", "גבעתיים", "פתח תקווה", "פתח תקוה", "ראשון לציון",
@@ -35,40 +28,45 @@ CITIES = [
     "רמלה", "קריית אונו", "קרית אונו", "אור יהודה", "ראש העין", "יהוד", "נצרת", "עפולה",
     "טבריה", "כרמיאל", "עכו", "נהריה", "קריית שמונה", "קרית שמונה", "אילת", "קריית גת",
     "אריאל", "מעלה אדומים", "רמת השרון", "זכרון יעקב", "קיסריה", "יקנעם", "שוהם", "אלעד",
+    "חיפה", "קריית אתא", "נשר", "טירת כרמל", "גבעת שמואל", "קריית מוצקין", "מגדל העמק",
 ]
 CITY_NORMAL = {"פתח תקוה": "פתח תקווה", "קרית אונו": "קריית אונו", "קרית שמונה": "קריית שמונה"}
 
+STUDENT = re.compile(r"סטודנט|טרום[\s-]?מתמח|קדם[\s-]?מתמח|\bstudents?\b|\bintern(ship)?\b|לתואר (ראשון|שני)", re.I)
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
 PHONE = re.compile(r"(?<!\d)0\d{1,2}[-\s]?\d{3}[-\s]?\d{4}(?!\d)|(?<!\d)05\d[-\s]?\d{7}(?!\d)")
-OFFICE_PHRASES = re.compile(r"(ל?משרד(י)? (ה)?עורכי ה?דין|ל?משרד עו[\"״]ד|ל?משרד עוה[\"״]ד|לשכת עורכי הדין)")
+YEARS = {"א": 1, "ב": 2, "ג": 3, "ד": 4}
 
 
-def _has(text, words):
-    return any(w in text for w in words)
+# jobs that serve students rather than employ them (dorm maintenance, student-affairs staff)
+ABOUT_STUDENTS = re.compile(r"מעונות (ה)?סטודנטים|(מינהל|ליווי|דיקנט|שירותי|רכז/?ת?) (ה)?סטודנטים")
 
 
-def roles_for(title, text):
-    """Classify by title first; fall back to the opening of the ad text."""
-    found = []
-    for scope in (title, text[:260]):
-        t = OFFICE_PHRASES.sub(" ", scope)
-        if re.search(r"סטודנט|טרום[\s-]?מתמח|קדם[\s-]?מתמח|law student|student position", t, re.I):
-            found.append("students")
-        if re.search(r"(?<!טרום )(?<!טרום-)(?<!קדם )מתמח|legal intern|staj", t, re.I):
-            found.append("interns")
-        if re.search(r"עו[\"״]ד|עור[כך](/?ת)?[\s-]?דין|עורכי(/ות)?[\s-]?דין|lawyer|attorney|associate", t, re.I):
-            found.append("lawyers")
-        if re.search(r"יוע[צץ](/?ת)? משפטי|יועמ[\"״]ש|counsel|general counsel|legal advisor", t, re.I):
-            found.append("counsel")
-        if re.search(r"מזכיר|פרלגל|פרליגל|paralegal|legal assistant|legal operations|מנהל(/?ת)? משרד|עוזר(/?ת)? משפטי|"
-                     r"עוזרת משפטית|קלדנ|רכז(/?ת)? (משפטי|גבי|צוות)|בק אופיס|back office|פקיד|נציג|אדמיניסטר|מחתים|גבי(י)?ה", t, re.I):
-            found.append("support")
-        if found:
-            break
-    # ads for other roles that say they are open to law students also count as student jobs
-    if re.search(r"סטודנט\S*\s+(ל)?משפטים|טרום[\s-]?מתמח|קדם[\s-]?מתמח", text):
-        found.append("students")
-    return list(dict.fromkeys(found)) or ["other"]
+def is_student_job(raw):
+    """True when the ad is meant for (or open to) students."""
+    if raw.get("student_board"):
+        return True
+    return bool(STUDENT.search(ABOUT_STUDENTS.sub(" ", raw["title"] + " " + raw["text"][:600])))
+
+
+def fields_for(raw):
+    if raw.get("field"):
+        return [raw["field"]]
+    found = [name for name, pat in FIELD_PATTERNS.items() if pat.search(raw["title"])]
+    if not found:
+        found = [name for name, pat in FIELD_PATTERNS.items() if pat.search(raw["text"][:400])]
+    return found[:2] or ["כללי"]
+
+
+def study_year(full):
+    """Minimum study year the ad asks for (1-4), or None."""
+    m = re.search(r"שנה\s*([אבגד])['׳]", full)
+    if m:
+        return YEARS[m.group(1)]
+    m = re.search(r"(first|second|third|1st|2nd|3rd)[- ]year", full, re.I)
+    if m:
+        return {"first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3}[m.group(1).lower()]
+    return None
 
 
 def classify(raw):
@@ -79,29 +77,24 @@ def classify(raw):
             c = CITY_NORMAL.get(c, c)
             if c not in cities:
                 cities.append(c)
-    areas = [name for name, words in AREAS.items() if _has(full, words)]
 
-    meta = raw.get("meta", [])
-    experience = next((m for m in meta if "נסיון" in m or "ניסיון" in m or "שנים" in m or "שנה" in m), "")
-    if not experience:
-        if re.search(r"ללא (ה)?(נסיון|ניסיון)|לא נדרש (נסיון|ניסיון)|אין צורך ב(נסיון|ניסיון)", full):
-            experience = "ללא ניסיון"
-        else:
-            m = re.search(r"(\d+\s*[-–]\s*\d+|\d+)\s*שנות (נסיון|ניסיון|ותק)", full)
-            if m:
-                experience = m.group(0)
-    scope = next((m for m in meta if "משרה" in m), "")
-    if not scope:
-        if "משרה חלקית" in full:
-            scope = "משרה חלקית"
-        elif "משרה מלאה" in full:
-            scope = "משרה מלאה"
+    perks = []
+    if re.search(r"משרה חלקית|חלקית|part[- ]time|\d+\s*שעות (חודשיות|בחודש|שבועיות)", full, re.I):
+        perks.append("משרה חלקית")
+    if re.search(r"שעות גמישות|גמישות בשעות|התאמה ללימודים|בהתאם (ל)?מערכת", full):
+        perks.append("שעות גמישות")
+    if re.search(r"מהבית|היברידי|hybrid|remote|מרחוק", full, re.I):
+        perks.append("היברידי / מהבית")
+    if re.search(r"ללא (ה)?(נסיון|ניסיון)|לא נדרש (נסיון|ניסיון)|אין צורך ב(נסיון|ניסיון)", full):
+        perks.append("ללא ניסיון")
+    if re.search(r"ערב|משמרות", full):
+        perks.append("משמרות / ערב")
 
     excerpt = PHONE.sub("", EMAIL.sub("", raw["text"]))
     excerpt = re.sub(r"https?://\S+", "", excerpt)
     excerpt = re.sub(r"\s+", " ", excerpt).strip()
-    if len(excerpt) > 260:
-        excerpt = excerpt[:260].rsplit(" ", 1)[0] + "…"
+    if len(excerpt) > 320:
+        excerpt = excerpt[:320].rsplit(" ", 1)[0] + "…"
 
     return {
         "id": raw["id"],
@@ -110,10 +103,9 @@ def classify(raw):
         "title": raw["title"],
         "employer": raw.get("employer", ""),
         "cities": cities[:4],
-        "roles": roles_for(raw["title"], raw["text"]),
-        "areas": areas[:4],
-        "experience": experience,
-        "scope": scope,
+        "fields": fields_for(raw),
+        "perks": perks,
+        "year": study_year(full),
         "excerpt": excerpt,
         "posted": raw.get("posted"),
     }

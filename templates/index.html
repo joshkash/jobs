@@ -3,140 +3,225 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>דרושים במשפט</title>
-<meta name="description" content="כל המשרות המשפטיות בישראל במקום אחד: עורכי דין, מתמחים, סטודנטים, יועצים משפטיים ומזכירות משפטית. מתעדכן כל יום.">
-<meta property="og:title" content="דרושים במשפט">
-<meta property="og:description" content="{{ total }} משרות משפטיות בישראל, מתעדכן כל יום.">
+<title>עבודות לסטודנטים</title>
+<meta name="description" content="כל משרות הסטודנטים בישראל במקום אחד: הייטק, הנדסה, כספים, משפטים, שירות לקוחות, הדרכה ועוד. מתעדכן כל בוקר.">
+<meta property="og:title" content="עבודות לסטודנטים">
+<meta property="og:description" content="{{ total }} משרות סטודנט בישראל, מכל התחומים. מתעדכן כל בוקר.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Assistant:wght@400;600;700&display=swap">
 <style>
-/* Layout: a court-docket ledger. Masthead, filter rail, then one column of numbered cases. */
+/* Layout: job-board shell. Top bar, search hero, field chips, then filters rail beside a results column. */
 :root {
-  --paper: #f6f7f4; --sheet: #ffffff; --ink: #1b2430; --muted: #5d6673; --rule: #d9ddd6;
-  --seal: #7a2331; --seal-soft: #f3e6e8; --fresh: #2f6b3f; --fresh-soft: #e4efe6;
-  --warn: #8a5a12; --warn-soft: #f6ecd9;
-  --display: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+  --bg: #f4f6f5; --surface: #ffffff; --ink: #102a2c; --muted: #56686a; --line: #dde3e1;
+  --brand: #0b6e4f; --brand-ink: #ffffff; --brand-soft: #e3f1ec;
+  --mark: #ffd23f; --mark-ink: #102a2c;
+  --fresh: #0b6e4f; --warn: #8a5a12; --warn-soft: #f6ecd9;
+  --display: "Rubik", "Arial Hebrew", Arial, sans-serif;
   --body: "Assistant", "Arial Hebrew", Arial, sans-serif;
+  --radius: 10px;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #14181e; --sheet: #1c222a; --ink: #e8eaed; --muted: #9aa3ad; --rule: #2e3640;
-    --seal: #e48a97; --seal-soft: #3a2228; --fresh: #8fcf9e; --fresh-soft: #1f3226;
-    --warn: #e5b866; --warn-soft: #3a2f1c; color-scheme: dark;
+    --bg: #0e1617; --surface: #162123; --ink: #e6efed; --muted: #9db0ad; --line: #26383a;
+    --brand: #3fbf8f; --brand-ink: #062018; --brand-soft: #173a2f;
+    --mark: #ffd23f; --mark-ink: #102a2c;
+    --fresh: #6fd6ad; --warn: #e5b866; --warn-soft: #3a2f1c; color-scheme: dark;
   }
 }
 * { box-sizing: border-box; }
-body {
-  margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55;
-  padding: 0 max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px));
-}
-.wrap { max-width: 900px; margin: 0 auto; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--seal); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
-header { padding-block: 40px 24px; border-bottom: 3px double var(--ink); display: grid; gap: 8px; }
-.eyebrow { font-size: 13px; letter-spacing: .04em; color: var(--seal); font-weight: 700; }
-h1 { font-family: var(--display); font-weight: 900; font-size: clamp(36px, 7vw, 56px); line-height: 1.05; margin: 0; text-wrap: balance; }
-.lede { color: var(--muted); margin: 0; max-width: 62ch; }
-.meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 16px; }
-.meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+/* top bar */
+.topbar { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.logo { font-family: var(--display); font-weight: 800; font-size: 20px; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+.logo i { font-style: normal; background: var(--mark); color: var(--mark-ink); padding: 0 6px; border-radius: 4px; }
+.nav { display: flex; gap: 18px; font-size: 15px; color: var(--muted); }
+.nav a { text-decoration: none; }
+.nav a:hover { color: var(--ink); }
 
-.roles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; padding-block: 20px 4px; }
-.role { font: inherit; text-align: start; padding: 10px 12px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); border-radius: 6px; cursor: pointer; display: grid; gap: 2px; }
-.role b { font-family: var(--display); font-size: 24px; line-height: 1; font-variant-numeric: tabular-nums; }
-.role span { font-size: 13px; color: var(--muted); }
-.role[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.role[aria-pressed="true"] span { color: var(--paper); opacity: .8; }
+/* hero */
+.hero { padding-block: 36px 20px; display: grid; gap: 14px; }
+.hero h1 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5.4vw, 48px); line-height: 1.1; margin: 0; text-wrap: balance; }
+.hero h1 mark { background: linear-gradient(transparent 55%, var(--mark) 55%); color: inherit; padding: 0 4px; }
+.hero p { margin: 0; color: var(--muted); max-width: 62ch; }
+.searchbar { display: grid; grid-template-columns: 1.6fr 1fr auto; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 8px; box-shadow: 0 6px 24px rgba(16, 42, 44, .06); }
+.searchbar label { display: grid; gap: 2px; padding: 4px 10px; min-width: 0; }
+.searchbar label + label { border-inline-start: 1px solid var(--line); }
+.searchbar span { font-size: 12px; font-weight: 700; color: var(--muted); }
+.searchbar input, .searchbar select { font: inherit; border: 0; background: transparent; color: var(--ink); padding: 2px 0; width: 100%; min-width: 0; }
+.searchbar input:focus, .searchbar select:focus { outline: none; }
+.go { font: inherit; font-weight: 700; background: var(--brand); color: var(--brand-ink); border: 0; border-radius: 10px; padding: 0 26px; cursor: pointer; }
+.stats { font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
 
-.filters { display: grid; gap: 12px; padding-block: 12px 20px; border-bottom: 1px solid var(--rule); }
-.search { width: 100%; font: inherit; padding: 10px 14px; border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet); color: var(--ink); }
-.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.chip { font: inherit; font-size: 14px; padding: 5px 12px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); border-radius: 999px; cursor: pointer; max-width: 100%; }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+/* field chips */
+.fields { display: flex; gap: 8px; overflow-x: auto; padding-block: 6px 14px; scrollbar-width: thin; }
+.fchip { flex: none; font: inherit; font-size: 14px; display: flex; gap: 6px; align-items: center; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.fchip b { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; }
+.fchip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.fchip[aria-pressed="true"] b { color: var(--bg); opacity: .75; }
 
-.count { font-size: 14px; color: var(--muted); padding-block: 14px 4px; }
-.job { display: grid; grid-template-columns: 64px 1fr; gap: 0 16px; padding-block: 20px; border-bottom: 1px solid var(--rule); }
-.docket { font-family: var(--display); font-weight: 700; font-size: 13px; color: var(--muted); padding-top: 6px; font-variant-numeric: tabular-nums; }
-.job-body { min-width: 0; display: grid; gap: 6px; }
-.job-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
-.job h2 { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.3; margin: 0; overflow-wrap: anywhere; }
-.employer { color: var(--muted); font-size: 15px; }
-.excerpt { margin: 0; max-width: 68ch; overflow-wrap: anywhere; }
+/* main layout */
+.layout { display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: start; padding-bottom: 40px; }
+aside { position: sticky; top: 76px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 18px; }
+aside h2 { font-family: var(--display); font-size: 15px; margin: 0 0 8px; }
+.checks { display: grid; gap: 6px; font-size: 15px; }
+.checks label { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+.checks input { accent-color: var(--brand); width: 16px; height: 16px; }
+aside select { font: inherit; width: 100%; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.reset { font: inherit; font-size: 14px; background: none; border: 0; color: var(--brand); cursor: pointer; text-decoration: underline; padding: 0; justify-self: start; }
+.filter-toggle { display: none; }
+
+.results { min-width: 0; display: grid; gap: 12px; }
+.results-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.results-head h2 { font-family: var(--display); font-size: 18px; margin: 0; }
+.tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.tab { font: inherit; font-size: 14px; border: 0; background: none; color: var(--muted); padding: 5px 12px; border-radius: 7px; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--brand-soft); color: var(--ink); font-weight: 700; }
+
+.job { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: grid; gap: 8px; }
+.job:hover { border-color: var(--brand); }
+.job-top { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; }
+.job h3 { font-family: var(--display); font-weight: 700; font-size: 18px; line-height: 1.35; margin: 0; overflow-wrap: anywhere; }
+.who { color: var(--muted); font-size: 15px; display: flex; flex-wrap: wrap; gap: 2px 12px; }
+.new { font-size: 12px; font-weight: 700; background: var(--mark); color: var(--mark-ink); padding: 1px 7px; border-radius: 4px; white-space: nowrap; }
+.excerpt { margin: 0; color: var(--ink); max-width: 72ch; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.job.open .excerpt { -webkit-line-clamp: unset; display: block; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; font-size: 13px; }
-.tag { padding: 2px 8px; border-radius: 4px; background: var(--paper); border: 1px solid var(--rule); }
-.tag.role-tag { background: var(--seal-soft); border-color: transparent; color: var(--seal); font-weight: 600; }
-.tag.fresh { background: var(--fresh-soft); border-color: transparent; color: var(--fresh); font-weight: 600; }
-.tag.stale { background: var(--warn-soft); border-color: transparent; color: var(--warn); font-weight: 600; }
-.job-foot { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 14px; }
-.open { color: var(--seal); font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
-.src { color: var(--muted); font-size: 13px; }
-.star { font: inherit; background: none; border: 1px solid var(--rule); color: var(--muted); border-radius: 6px; padding: 4px 10px; cursor: pointer; white-space: nowrap; font-size: 13px; }
-.star[aria-pressed="true"] { color: var(--seal); border-color: var(--seal); font-weight: 700; }
-.empty { padding: 32px 0; color: var(--muted); }
-.more { font: inherit; margin-top: 20px; padding: 10px 18px; border: 1px solid var(--ink); background: var(--sheet); color: var(--ink); border-radius: 6px; cursor: pointer; font-weight: 700; }
+.tag { padding: 2px 9px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); }
+.tag.field { background: var(--brand-soft); border-color: transparent; font-weight: 600; }
+.tag.stale { background: var(--warn-soft); border-color: transparent; color: var(--warn); }
+.job-foot { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; font-size: 14px; }
+.actions { display: flex; gap: 8px; align-items: center; }
+.apply { font-weight: 700; text-decoration: none; background: var(--brand); color: var(--brand-ink); padding: 6px 14px; border-radius: 8px; }
+.ghost { font: inherit; font-size: 14px; background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 8px; padding: 5px 12px; cursor: pointer; }
+.ghost[aria-pressed="true"] { border-color: var(--brand); color: var(--brand); font-weight: 700; }
+.meta { color: var(--muted); font-size: 13px; }
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); padding: 28px; color: var(--muted); text-align: center; }
+.more { font: inherit; font-weight: 700; justify-self: center; padding: 10px 22px; border: 1px solid var(--ink); background: var(--surface); color: var(--ink); border-radius: 10px; cursor: pointer; }
 
-section.sources { margin-top: 40px; display: grid; gap: 12px; }
-section.sources h3 { font-family: var(--display); font-size: 22px; margin: 0; }
-.src-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-.src-list li { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
-.src-list a { font-weight: 700; text-decoration: none; }
-.src-list .note { display: block; margin-top: 2px; }
-.note { font-size: 13px; color: var(--muted); max-width: 68ch; margin: 0; }
+/* lower sections */
+.band { border-top: 1px solid var(--line); padding-block: 32px; display: grid; gap: 12px; }
+.band h2 { font-family: var(--display); font-size: 22px; margin: 0; }
+.band p { margin: 0; color: var(--muted); max-width: 70ch; }
+.links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.links li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; min-width: 0; }
+.links a { font-weight: 700; text-decoration: none; }
+.links a:hover { text-decoration: underline; }
+.links small { display: block; color: var(--muted); font-size: 13px; }
+footer { padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
 
-@media (max-width: 560px) {
-  .job { grid-template-columns: 1fr; }
-  .docket { padding-top: 0; }
-  .job-head { flex-direction: column; }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  aside { position: static; display: none; }
+  aside.show { display: grid; }
+  .filter-toggle { display: inline-flex; }
+  .nav { display: none; }
+}
+@media (max-width: 600px) {
+  .searchbar { grid-template-columns: 1fr; }
+  .searchbar label + label { border-inline-start: 0; border-top: 1px solid var(--line); }
+  .go { padding: 10px; }
+  .job-top { flex-direction: column; }
 }
 </style>
 </head>
 <body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="logo" href="#">עבודות <i>לסטודנטים</i></a>
+    <nav class="nav"><a href="#jobs">משרות</a><a href="#facebook">קבוצות פייסבוק</a><a href="#programs">תוכניות סטודנטים</a><a href="#sources">מקורות</a></nav>
+  </div>
+</div>
+
 <div class="wrap">
-  <header>
-    <div class="eyebrow">עורכי דין · מתמחים · סטודנטים · יועצים משפטיים · מזכירות משפטית</div>
-    <h1>דרושים במשפט</h1>
-    <p class="lede">כל המשרות המשפטיות בישראל מלוחות הדרושים ומלשכת עורכי הדין, במקום אחד. הרשימה מתעדכנת אוטומטית כל בוקר. כל מודעה מקשרת למקור, ושם מגישים מועמדות.</p>
-    <div class="meta"><span>עודכן: <b id="updated">{{ updated }}</b></span><span><b>{{ total }}</b> משרות פתוחות</span><span><b id="savedCount">0</b> שמורות אצלך</span></div>
-  </header>
+  <section class="hero">
+    <h1>כל משרות הסטודנטים בישראל, <mark>במקום אחד</mark></h1>
+    <p>אנחנו אוספים כל בוקר משרות סטודנט מלוחות הדרושים, מהשירות הציבורי ומלשכת עורכי הדין. כל משרה מקשרת למודעה המקורית, ושם מגישים.</p>
+    <form class="searchbar" id="searchForm" role="search">
+      <label for="q"><span>מה מחפשים?</span><input id="q" type="search" placeholder="תפקיד, חברה או מילה, למשל ״QA״ או ״משרה חלקית״" autocomplete="off"></label>
+      <label for="city"><span>איפה?</span><select id="city"><option value="">כל הארץ</option></select></label>
+      <button class="go" type="submit">חיפוש</button>
+    </form>
+    <div class="stats"><span><b>{{ total }}</b> משרות פתוחות</span><span><b id="newCount">0</b> חדשות השבוע</span><span>עודכן <b id="updated">{{ updated }}</b></span></div>
+  </section>
 
-  <div class="roles" id="roles" role="group" aria-label="סוג תפקיד"></div>
+  <div class="fields" id="fields" role="group" aria-label="תחום"></div>
 
-  <div class="filters">
-    <input id="q" class="search" type="search" placeholder="חיפוש חופשי: משרד, עיר, תחום, למשל ״נדל״ן תל אביב״" aria-label="חיפוש">
-    <div class="row">
-      <select id="city" class="chip" aria-label="עיר"><option value="">כל הערים</option></select>
-      <select id="area" class="chip" aria-label="תחום משפטי"><option value="">כל התחומים</option></select>
-      <select id="source" class="chip" aria-label="מקור"><option value="">כל המקורות</option></select>
-    </div>
-    <div class="row">
-      <button class="chip" id="noExp" aria-pressed="false">ללא ניסיון</button>
-      <button class="chip" id="partTime" aria-pressed="false">משרה חלקית</button>
-      <button class="chip" id="fresh" aria-pressed="false">פורסם ב־14 הימים האחרונים</button>
-      <button class="chip" id="savedOnly" aria-pressed="false">רק שמורות</button>
-    </div>
+  <div class="layout" id="jobs">
+    <aside id="filters" aria-label="סינון">
+      <div>
+        <h2>סוג משרה</h2>
+        <div class="checks">
+          <label><input type="checkbox" data-perk="משרה חלקית" id="p1"> משרה חלקית</label>
+          <label><input type="checkbox" data-perk="שעות גמישות" id="p2"> שעות גמישות</label>
+          <label><input type="checkbox" data-perk="היברידי / מהבית" id="p3"> היברידי / מהבית</label>
+          <label><input type="checkbox" data-perk="ללא ניסיון" id="p4"> ללא ניסיון</label>
+          <label><input type="checkbox" data-perk="משמרות / ערב" id="p5"> משמרות / ערב</label>
+        </div>
+      </div>
+      <div>
+        <h2>אני בשנה</h2>
+        <select id="year"><option value="0">לא משנה</option><option value="1">א׳</option><option value="2">ב׳</option><option value="3">ג׳</option><option value="4">ד׳ ומעלה</option></select>
+      </div>
+      <div>
+        <h2>פורסם</h2>
+        <select id="age"><option value="0">בכל זמן</option><option value="3">ב־3 הימים האחרונים</option><option value="7">בשבוע האחרון</option><option value="30">בחודש האחרון</option></select>
+      </div>
+      <div>
+        <h2>מקור</h2>
+        <select id="source"><option value="">כל המקורות</option></select>
+      </div>
+      <button class="reset" id="reset" type="button">ניקוי כל הסינונים</button>
+    </aside>
+
+    <section class="results" aria-live="polite">
+      <div class="results-head">
+        <h2 id="count">טוען משרות…</h2>
+        <div class="actions">
+          <button class="ghost filter-toggle" id="filterToggle" type="button" aria-expanded="false" aria-controls="filters">סינון</button>
+          <div class="tabs" role="tablist">
+            <button class="tab" role="tab" aria-selected="true" data-tab="all">כל המשרות</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="saved">שמורות (<span id="savedCount">0</span>)</button>
+          </div>
+        </div>
+      </div>
+      <div id="list" style="display:grid;gap:12px"></div>
+      <button class="more" id="more" hidden>עוד משרות</button>
+    </section>
   </div>
 
-  <div class="count" id="count" aria-live="polite"></div>
-  <div id="list"><div class="empty">טוען משרות…</div></div>
-  <button class="more" id="more" hidden>הצג עוד משרות</button>
-
-  <section class="sources">
-    <h3>תוכניות סטודנטים ומתמחים במשרדים הגדולים</h3>
-    <p class="note">המשרדים האלה מגייסים סטודנטים ומתמחים דרך תוכניות קבועות ולא דרך מודעות, ולכן הם לא מופיעים ברשימה למעלה. מגישים ישירות באתר המשרד, ולרוב כשנה לפני מועד ההתחלה.</p>
-    <ul class="src-list">
-      {% for p in programs %}<li><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a><span class="note">{{ p.what }}</span></li>{% endfor %}
+  <section class="band" id="facebook">
+    <h2>קבוצות פייסבוק</h2>
+    <p>הרבה משרות סטודנט מתפרסמות רק בקבוצות פייסבוק. פייסבוק לא מאפשר איסוף אוטומטי מקבוצות, ולכן הן לא מופיעות ברשימה למעלה. הקישורים פותחים חיפוש קבוצות בפייסבוק. כדאי להצטרף ולהפעיל התראות.</p>
+    <ul class="links">
+      {% for f in facebook %}<li><a href="{{ f.url }}" target="_blank" rel="noopener">{{ f.name }}</a><small>חיפוש קבוצות: ״{{ f.q }}״</small></li>{% endfor %}
     </ul>
   </section>
 
-  <section class="sources">
-    <h3>מקורות</h3>
-    <p class="note">המשרות נאספות אוטומטית מהלוחות האלה. מודעות שהוסרו מהמקור יורדות מכאן ביום שאחרי. כשאין למודעה תאריך פרסום, מוצג התאריך שבו ראינו אותה לראשונה.</p>
-    <ul class="src-list">
+  <section class="band" id="programs">
+    <h2>תוכניות סטודנטים במשרדי עורכי הדין הגדולים</h2>
+    <p>המשרדים האלה מגייסים סטודנטים למשפטים ומתמחים דרך תוכניות קבועות ולא דרך מודעות. מגישים באתר המשרד, לרוב כשנה לפני מועד ההתחלה.</p>
+    <ul class="links">
+      {% for p in programs %}<li><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a><small>{{ p.what }}</small></li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="band" id="sources">
+    <h2>מקורות</h2>
+    <p>המשרות נאספות אוטומטית מהלוחות האלה כל בוקר. מודעה שהוסרה מהמקור יורדת מכאן. כשאין למודעה תאריך פרסום, מוצג התאריך שבו מצאנו אותה לראשונה.</p>
+    <ul class="links">
       {% for b in boards %}<li><a href="{{ b.url }}" target="_blank" rel="noopener">{{ b.name }}</a></li>{% endfor %}
     </ul>
   </section>
+
+  <footer>עבודות לסטודנטים · נבנה עם קוד פתוח ב־GitHub · המודעות שייכות למפרסמים שלהן</footer>
 </div>
 
 <script id="data" type="application/json">{{ payload|tojson }}</script>
@@ -144,115 +229,135 @@ section.sources h3 { font-family: var(--display); font-size: 22px; margin: 0; }
 (function () {
   var data = JSON.parse(document.getElementById("data").textContent);
   var jobs = data.jobs;
-  var ROLE_NAMES = {}; data.roles.forEach(function (r) { ROLE_NAMES[r[0]] = r[1]; });
-  var PAGE = 40;
-  if (data.updated) document.getElementById("updated").textContent = data.updated.split("-").reverse().join(".");
-  var state = { role: "", city: "", area: "", source: "", q: "", noExp: false, partTime: false, fresh: false, savedOnly: false, shown: PAGE };
+  var PAGE = 30;
+  var state = { field: "", city: "", q: "", perks: [], year: 0, age: 0, source: "", tab: "all", shown: PAGE };
   var saved = {};
-  try { saved = JSON.parse(localStorage.getItem("legaljobs-saved") || "{}") || {}; } catch (e) { saved = {}; }
-  function persist() { try { localStorage.setItem("legaljobs-saved", JSON.stringify(saved)); } catch (e) {} }
+  try { saved = JSON.parse(localStorage.getItem("studentjobs-saved") || "{}") || {}; } catch (e) { saved = {}; }
+  function persist() { try { localStorage.setItem("studentjobs-saved", JSON.stringify(saved)); } catch (e) {} }
 
   var TODAY = new Date(); TODAY.setHours(0, 0, 0, 0);
   function daysAgo(iso) { return Math.max(0, Math.round((TODAY - new Date(iso + "T00:00:00")) / 86400000)); }
-  function fmtDate(iso) { var p = iso.split("-"); return p[2] + "." + p[1] + "." + p[0].slice(2); }
-  function ageLabel(n) {
+  function fmt(iso) { var p = iso.split("-"); return p[2] + "." + p[1] + "." + p[0].slice(2); }
+  function ago(n) {
     if (n === 0) return "היום"; if (n === 1) return "אתמול";
     if (n < 30) return "לפני " + n + " ימים";
     var m = Math.round(n / 30); return m === 1 ? "לפני חודש" : "לפני " + m + " חודשים";
   }
+  // a job is new when it was posted (or, with no posting date, first found) in the last few days
+  function age(j) { return j.dated ? daysAgo(j.posted) : daysAgo(j.first_seen); }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function uniq(list) { return Array.from(new Set(list)).sort(function (a, b) { return a.localeCompare(b, "he"); }); }
   function fill(id, values) { var s = document.getElementById(id); values.forEach(function (v) { var o = el("option", null, v); o.value = v; s.appendChild(o); }); }
 
+  if (data.updated) document.getElementById("updated").textContent = fmt(data.updated);
+  document.getElementById("newCount").textContent = jobs.filter(function (j) { return age(j) <= 7; }).length;
   fill("city", uniq([].concat.apply([], jobs.map(function (j) { return j.cities; }))));
-  fill("area", uniq([].concat.apply([], jobs.map(function (j) { return j.areas; }))));
   fill("source", uniq(jobs.map(function (j) { return j.source; })));
 
-  var rolesBox = document.getElementById("roles");
-  [["", "כל המשרות"]].concat(data.roles).forEach(function (r) {
-    var n = r[0] ? jobs.filter(function (j) { return j.roles.indexOf(r[0]) > -1; }).length : jobs.length;
-    if (r[0] && !n) return;
-    var b = el("button", "role"); b.setAttribute("aria-pressed", r[0] === "" ? "true" : "false");
-    b.appendChild(el("b", null, n)); b.appendChild(el("span", null, r[1]));
-    b.addEventListener("click", function () {
-      state.role = r[0]; state.shown = PAGE;
-      rolesBox.querySelectorAll(".role").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-      render();
-    });
-    rolesBox.appendChild(b);
+  // field chips with live counts
+  var fieldsBox = document.getElementById("fields");
+  var chips = [];
+  [""].concat(data.fields).forEach(function (f) {
+    var n = f ? jobs.filter(function (j) { return j.fields.indexOf(f) > -1; }).length : jobs.length;
+    if (f && !n) return;
+    var b = el("button", "fchip"); b.type = "button";
+    b.setAttribute("aria-pressed", f === "" ? "true" : "false");
+    b.appendChild(document.createTextNode(f || "כל התחומים")); b.appendChild(el("b", null, n));
+    b.addEventListener("click", function () { state.field = f; state.shown = PAGE; chips.forEach(function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); }); render(); });
+    chips.push(b); fieldsBox.appendChild(b);
   });
 
   function matches(j) {
-    if (state.role && j.roles.indexOf(state.role) === -1) return false;
+    if (state.tab === "saved" && !saved[j.id]) return false;
+    if (state.field && j.fields.indexOf(state.field) === -1) return false;
     if (state.city && j.cities.indexOf(state.city) === -1) return false;
-    if (state.area && j.areas.indexOf(state.area) === -1) return false;
     if (state.source && j.source !== state.source) return false;
-    if (state.savedOnly && !saved[j.id]) return false;
-    if (state.noExp && !/ללא|לא נדרש|0-|0 -/.test(j.experience)) return false;
-    if (state.partTime && !/חלקית/.test(j.scope + " " + j.excerpt)) return false;
-    if (state.fresh && daysAgo(j.posted) > 14) return false;
+    if (state.year && j.year && j.year > state.year) return false;
+    if (state.age && daysAgo(j.posted) > state.age) return false;
+    for (var i = 0; i < state.perks.length; i++) if (j.perks.indexOf(state.perks[i]) === -1) return false;
     if (state.q) {
-      var hay = [j.title, j.employer, j.cities.join(" "), j.areas.join(" "), j.excerpt, j.source].join(" ");
-      var words = state.q.split(/\s+/);
-      for (var i = 0; i < words.length; i++) if (hay.indexOf(words[i].replace(/["״]/g, "")) === -1 && hay.indexOf(words[i]) === -1) return false;
+      var hay = [j.title, j.employer, j.cities.join(" "), j.fields.join(" "), j.perks.join(" "), j.excerpt].join(" ").toLowerCase();
+      var words = state.q.toLowerCase().split(/\s+/);
+      for (var k = 0; k < words.length; k++) if (hay.indexOf(words[k]) === -1) return false;
     }
     return true;
   }
 
-  function card(j, idx) {
+  function card(j) {
     var art = el("article", "job");
-    art.appendChild(el("div", "docket", "תיק " + String(idx).padStart(3, "0")));
-    var body = el("div", "job-body");
-    var head = el("div", "job-head");
-    var hg = el("div");
-    hg.appendChild(el("h2", null, j.title));
-    var who = [j.employer, j.cities.join(", ")].filter(Boolean).join(" · ");
-    if (who) hg.appendChild(el("div", "employer", who));
-    head.appendChild(hg);
-    var star = el("button", "star", saved[j.id] ? "★ שמור" : "☆ שמירה");
+    var top = el("div", "job-top");
+    var head = el("div");
+    var h = el("h3", null, j.title);
+    head.appendChild(h);
+    var who = el("div", "who");
+    if (j.employer && j.employer.indexOf("חסוי") === -1) who.appendChild(el("span", null, j.employer));
+    if (j.cities.length) who.appendChild(el("span", null, j.cities.join(", ")));
+    if (who.childNodes.length) head.appendChild(who);
+    top.appendChild(head);
+    if (age(j) <= 2) top.appendChild(el("span", "new", "חדש"));
+    art.appendChild(top);
+    if (j.excerpt) art.appendChild(el("p", "excerpt", j.excerpt));
+    var tags = el("div", "tags");
+    j.fields.forEach(function (f) { tags.appendChild(el("span", "tag field", f)); });
+    j.perks.forEach(function (p) { tags.appendChild(el("span", "tag", p)); });
+    if (j.year) tags.appendChild(el("span", "tag", "משנה " + "אבגד"[j.year - 1] + "׳"));
+    art.appendChild(tags);
+    var foot = el("div", "job-foot");
+    var a = daysAgo(j.posted);
+    foot.appendChild(el("span", "meta", (j.dated ? "פורסם " + ago(a) : "נמצא " + ago(daysAgo(j.first_seen))) + " · " + j.source));
+    var actions = el("div", "actions");
+    if (j.excerpt && j.excerpt.length > 140) {
+      var more = el("button", "ghost", "פרטים"); more.type = "button";
+      more.addEventListener("click", function () { var open = art.classList.toggle("open"); more.textContent = open ? "פחות" : "פרטים"; });
+      actions.appendChild(more);
+    }
+    var star = el("button", "ghost", saved[j.id] ? "★ שמורה" : "☆ שמירה"); star.type = "button";
     star.setAttribute("aria-pressed", saved[j.id] ? "true" : "false");
     star.addEventListener("click", function () { if (saved[j.id]) delete saved[j.id]; else saved[j.id] = 1; persist(); render(); });
-    head.appendChild(star);
-    body.appendChild(head);
-    if (j.excerpt) body.appendChild(el("p", "excerpt", j.excerpt));
-    var tags = el("div", "tags");
-    j.roles.forEach(function (r) { if (r !== "other") tags.appendChild(el("span", "tag role-tag", ROLE_NAMES[r])); });
-    j.areas.forEach(function (a) { tags.appendChild(el("span", "tag", a)); });
-    if (j.experience) tags.appendChild(el("span", "tag", j.experience));
-    if (j.scope) tags.appendChild(el("span", "tag", j.scope));
-    var a = daysAgo(j.posted);
-    if (j.dated) tags.appendChild(el("span", a <= 14 ? "tag fresh" : (a > 60 ? "tag stale" : "tag"), "פורסם " + ageLabel(a)));
-    else tags.appendChild(el("span", "tag", "בלוח מאז " + fmtDate(j.first_seen)));
-    body.appendChild(tags);
-    var foot = el("div", "job-foot");
-    var link = el("a", "open", "למודעה ולהגשה ←"); link.href = j.url; link.target = "_blank"; link.rel = "noopener";
-    foot.appendChild(link);
-    foot.appendChild(el("span", "src", "מקור: " + j.source + " · " + fmtDate(j.posted)));
-    body.appendChild(foot);
-    art.appendChild(body);
+    actions.appendChild(star);
+    var link = el("a", "apply", "להגשה ←"); link.href = j.url; link.target = "_blank"; link.rel = "noopener";
+    actions.appendChild(link);
+    foot.appendChild(actions);
+    art.appendChild(foot);
     return art;
   }
 
   function render() {
     var list = document.getElementById("list"); list.textContent = "";
     var shown = jobs.filter(matches);
-    document.getElementById("count").textContent = shown.length === jobs.length
-      ? "כל " + jobs.length + " המשרות, החדשות קודם" : shown.length + " משרות מתוך " + jobs.length;
+    document.getElementById("count").textContent = state.tab === "saved" ? shown.length + " משרות שמורות" : "נמצאו " + shown.length + " משרות";
     document.getElementById("savedCount").textContent = Object.keys(saved).length;
-    if (!shown.length) { list.appendChild(el("div", "empty", "אין משרות שמתאימות לסינון. נסו להסיר מסנן או לחפש מילה אחרת.")); }
-    shown.slice(0, state.shown).forEach(function (j, i) { list.appendChild(card(j, i + 1)); });
+    if (!shown.length) list.appendChild(el("div", "empty", state.tab === "saved" ? "עוד לא שמרת משרות. לחצו ״שמירה״ על משרה כדי למצוא אותה כאן." : "לא מצאנו משרות שמתאימות לחיפוש. נסו להסיר סינון או לחפש מילה אחרת."));
+    shown.slice(0, state.shown).forEach(function (j) { list.appendChild(card(j)); });
     document.getElementById("more").hidden = shown.length <= state.shown;
   }
 
-  function toggle(id, key) {
-    var b = document.getElementById(id);
-    b.addEventListener("click", function () { state[key] = !state[key]; state.shown = PAGE; b.setAttribute("aria-pressed", state[key] ? "true" : "false"); render(); });
-  }
-  toggle("noExp", "noExp"); toggle("partTime", "partTime"); toggle("fresh", "fresh"); toggle("savedOnly", "savedOnly");
-  ["city", "area", "source"].forEach(function (id) {
-    document.getElementById(id).addEventListener("change", function (e) { state[id] = e.target.value; state.shown = PAGE; render(); });
-  });
+  document.getElementById("searchForm").addEventListener("submit", function (e) { e.preventDefault(); document.getElementById("jobs").scrollIntoView({ behavior: "smooth" }); });
   document.getElementById("q").addEventListener("input", function (e) { state.q = e.target.value.trim(); state.shown = PAGE; render(); });
+  ["city", "source"].forEach(function (id) { document.getElementById(id).addEventListener("change", function (e) { state[id] = e.target.value; state.shown = PAGE; render(); }); });
+  ["year", "age"].forEach(function (id) { document.getElementById(id).addEventListener("change", function (e) { state[id] = +e.target.value; state.shown = PAGE; render(); }); });
+  document.querySelectorAll("[data-perk]").forEach(function (c) {
+    c.addEventListener("change", function () {
+      state.perks = Array.from(document.querySelectorAll("[data-perk]:checked")).map(function (x) { return x.getAttribute("data-perk"); });
+      state.shown = PAGE; render();
+    });
+  });
+  document.querySelectorAll(".tab").forEach(function (t) {
+    t.addEventListener("click", function () {
+      state.tab = t.getAttribute("data-tab"); state.shown = PAGE;
+      document.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", x === t ? "true" : "false"); });
+      render();
+    });
+  });
+  document.getElementById("reset").addEventListener("click", function () {
+    document.querySelectorAll("[data-perk]").forEach(function (c) { c.checked = false; });
+    ["year", "age", "source", "city"].forEach(function (id) { document.getElementById(id).selectedIndex = 0; });
+    document.getElementById("q").value = "";
+    state = { field: state.field, city: "", q: "", perks: [], year: 0, age: 0, source: "", tab: state.tab, shown: PAGE };
+    render();
+  });
+  var toggle = document.getElementById("filterToggle");
+  toggle.addEventListener("click", function () { var f = document.getElementById("filters"); var on = f.classList.toggle("show"); toggle.setAttribute("aria-expanded", on ? "true" : "false"); });
   document.getElementById("more").addEventListener("click", function () { state.shown += PAGE; render(); });
   render();
 })();

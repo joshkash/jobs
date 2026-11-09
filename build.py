@@ -10,30 +10,42 @@ import sys
 import traceback
 from datetime import date, timedelta
 from pathlib import Path
+from urllib.parse import quote
 
 from jinja2 import Environment, FileSystemLoader
 
 sys.path.insert(0, str(Path(__file__).parent))
-from scraper.classify import ROLES, classify
+from scraper.classify import FIELDS, classify, is_student_job
 from scraper.sources import SOURCES
 
 ROOT = Path(__file__).parent
 DATA = ROOT / "data" / "jobs.json"
 SITE = ROOT / "site"
-MAX_AGE_DAYS = 120
 
 BOARDS = [
-    {"name": "דרושים · עריכת דין", "url": "https://www.drushim.co.il/jobs/cat14/"},
-    {"name": "מובטל · חוק ומשפט", "url": "https://www.muvtal.co.il/jobs?filter_categories=38"},
-    {"name": "ג'ובמאסטר · סטודנט למשפטים", "url": "https://www.jobmaster.co.il/jobs/q-%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98-%D7%9C%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D/"},
+    {"name": "דרושים · משרות סטודנט", "url": "https://www.drushim.co.il/jobs/subcat/88/"},
+    {"name": "ג'ובמאסטר · עבודה לסטודנטים", "url": "https://www.jobmaster.co.il/jobs/q-%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98/"},
     {"name": "mploy · משרות סטודנט בשירות הציבורי", "url": "https://www.mploy.co.il/job/tagged/%D7%A1%D7%98%D7%95%D7%93%D7%A0%D7%98%D7%99%D7%9D-%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D"},
+    {"name": "מובטל · סטודנטים למשפטים", "url": "https://www.muvtal.co.il/jobs?filter_profession=530"},
     {"name": "לשכת עוה״ד מחוז מרכז", "url": "https://merkazbar.org.il/%D7%99%D7%97%D7%99%D7%93%D7%AA-%D7%94%D7%A9%D7%9E%D7%94/%D7%93%D7%A8%D7%95%D7%A9%D7%99%D7%9D/"},
     {"name": "לשכת עוה״ד מחוז ירושלים", "url": "https://jerusalembar.org.il/mdrushim/"},
-    {"name": "שיבולת · משרות פתוחות", "url": "https://www.shibolet.com/careers/"},
     {"name": "LegalAlphabet · Israel", "url": "https://legalalphabet.com/israel/jobs"},
 ]
 
-# Big firms that recruit students and interns through standing programs rather than dated ads.
+# Facebook groups can't be read automatically (they need a login, and Facebook forbids scraping),
+# so the site links to Facebook's own group search for the most useful terms.
+FACEBOOK = [
+    {"name": "דרושים סטודנטים", "q": "דרושים סטודנטים"},
+    {"name": "משרות סטודנט", "q": "משרות סטודנט"},
+    {"name": "סטודנטים תל אביב והמרכז", "q": "דרושים סטודנטים תל אביב"},
+    {"name": "סטודנטים ירושלים", "q": "דרושים סטודנטים ירושלים"},
+    {"name": "סטודנטים חיפה והצפון", "q": "דרושים סטודנטים חיפה"},
+    {"name": "סטודנטים באר שבע והדרום", "q": "דרושים סטודנטים באר שבע"},
+    {"name": "משרות סטודנט בהייטק", "q": "משרות סטודנט הייטק"},
+    {"name": "סטודנטים למשפטים", "q": "דרושים סטודנטים למשפטים"},
+]
+
+# Law firms that recruit students and interns through standing programs rather than dated ads.
 PROGRAMS = [
     {"name": "גורניצקי", "what": "תוכנית מתמחים, פתוחה לסטודנטים", "url": "https://www.gornitzky.com/career-legal-interns/"},
     {"name": "גולדפרב גרוס זליגמן", "what": "מתמחים וסטודנטים", "url": "https://www.goldfarb.com/he/interns/"},
@@ -46,7 +58,10 @@ PROGRAMS = [
 
 def load():
     if DATA.exists():
-        return json.loads(DATA.read_text(encoding="utf-8"))
+        store = json.loads(DATA.read_text(encoding="utf-8"))
+        # listings saved before the site covered student jobs only have no "fields"; drop them
+        store["jobs"] = {k: v for k, v in store["jobs"].items() if "fields" in v}
+        return store
     return {"updated": None, "jobs": {}, "status": {}}
 
 
@@ -63,10 +78,10 @@ def scrape(store):
             continue
         found = set()
         for r in raw:
-            job = classify(r)
-            if src.get("strict") and job["roles"] == ["other"]:
-                jobs.pop(job["id"], None)
+            if not is_student_job(r):
+                jobs.pop(r["id"], None)
                 continue
+            job = classify(r)
             old = jobs.get(job["id"], {})
             job["first_seen"] = old.get("first_seen", today)
             job["posted"] = job["posted"] or old.get("posted") or job["first_seen"]
@@ -90,9 +105,10 @@ def build(store):
     env = Environment(loader=FileSystemLoader(ROOT / "templates"), autoescape=True)
     jobs = sorted(store["jobs"].values(), key=lambda j: (j["posted"], j["id"]), reverse=True)
     html = env.get_template("index.html").render(
-        payload={"updated": store["updated"], "jobs": jobs, "roles": ROLES},
+        payload={"updated": store["updated"], "jobs": jobs, "fields": list(FIELDS) + ["כללי"]},
         boards=BOARDS,
         programs=PROGRAMS,
+        facebook=[{**f, "url": "https://www.facebook.com/search/groups/?q=" + quote(f["q"])} for f in FACEBOOK],
         total=len(jobs),
         updated=store["updated"],
     )
