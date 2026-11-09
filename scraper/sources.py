@@ -165,6 +165,7 @@ def muvtal(max_pages=15):
                 "employer": "",
                 "cities": [],
                 "text": " ".join(parts[1:40]),
+                "body": "\n".join(p for p in parts[1:80] if p not in ("לפרטי המשרה", "פתח בחלון חדש", "הגש מועמדות")),
                 "posted": None,
                 "meta": [],
                 "field": "משפטים",
@@ -266,6 +267,7 @@ def merkaz():
             "employer": "",
             "cities": [],
             "text": " ".join(lines),
+            "body": "\n".join(lines),
             "posted": posted,
             "meta": [],
         })
@@ -291,6 +293,7 @@ def jerusalem():
             "employer": "",
             "cities": [],
             "text": " ".join(lines),
+            "body": "\n".join(lines),
             "posted": None,
             "meta": [],
         })
@@ -319,12 +322,50 @@ def legalalphabet():
     return jobs
 
 
+# ---------------------------------------------------------------- full ad text from job pages
+def _jsonld_job(html):
+    for block in re.findall(r'<script type="application/ld\+json"[^>]*>(.*?)</script>', html, re.S):
+        try:
+            data = json.loads(block)
+        except ValueError:
+            continue
+        for item in data if isinstance(data, list) else [data]:
+            if isinstance(item, dict) and item.get("@type") == "JobPosting":
+                return item
+    return None
+
+
+def drushim_detail(url):
+    """The job page's own sections ("תיאור משרה", "דרישות התפקיד"), with their line breaks."""
+    html = fetch(url)
+    _, text = soup_text(html)
+    lines = text.split("\n")
+    if "תיאור משרה" in lines:
+        start = lines.index("תיאור משרה")
+        end = next((i for i in range(start, len(lines)) if lines[i] in ("קטגוריה", "תחומים")), len(lines))
+        return "\n".join(lines[start:end])
+    job = _jsonld_job(html)
+    return BeautifulSoup(job["description"], "html.parser").get_text("\n", strip=True) if job else ""
+
+
+def mploy_detail(url):
+    job = _jsonld_job(fetch(url))
+    if not job:
+        return ""
+    body = job.get("description", "")
+    body = re.sub(r"\*\*|__", "", body)                 # markdown bold
+    body = re.sub(r"^\s*[*-]\s+", "• ", body, flags=re.M)  # markdown bullets
+    return body.strip()
+
+
 # complete=True: the scrape sees the board's whole list, so a missing ad means it closed.
 # complete=False: the scrape sees only the newest ads, so older ones expire by age instead.
+# detail: reads the full ad from the job's own page (fetched once per job). JobMaster has none on
+# purpose: its job pages ask other sites not to copy its ads, so it keeps the short summary.
 SOURCES = {
-    "drushim": {"fn": drushim, "complete": False, "max_age": 45},
+    "drushim": {"fn": drushim, "complete": False, "max_age": 45, "detail": drushim_detail},
     "jobmaster": {"fn": jobmaster, "complete": False, "max_age": 45},
-    "mploy": {"fn": mploy, "complete": False, "max_age": 45},
+    "mploy": {"fn": mploy, "complete": False, "max_age": 45, "detail": mploy_detail},
     "muvtal": {"fn": muvtal, "complete": True, "max_age": 120},
     "merkaz": {"fn": merkaz, "complete": True, "max_age": 120},
     "jerusalem": {"fn": jerusalem, "complete": True, "max_age": 120},

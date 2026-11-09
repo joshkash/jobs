@@ -91,8 +91,15 @@ aside select { font: inherit; width: 100%; padding: 7px 10px; border: 1px solid 
 .job h3 { font-family: var(--display); font-weight: 700; font-size: 18px; line-height: 1.35; margin: 0; overflow-wrap: anywhere; }
 .who { color: var(--muted); font-size: 15px; display: flex; flex-wrap: wrap; gap: 2px 12px; }
 .new { font-size: 12px; font-weight: 700; background: var(--mark); color: var(--mark-ink); padding: 1px 7px; border-radius: 4px; white-space: nowrap; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; }
+.facts span b { color: var(--muted); font-weight: 600; margin-inline-end: 4px; }
+.details { display: none; border-top: 1px solid var(--line); padding-top: 10px; font-size: 15px; max-width: 72ch; overflow-wrap: anywhere; }
+.job.open .details { display: grid; gap: 2px; }
+.job.open > .excerpt { display: none; }
+.details h4 { font-family: var(--display); font-size: 15px; margin: 10px 0 2px; }
+.details p { margin: 0; }
+.details .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
 .excerpt { margin: 0; color: var(--ink); max-width: 72ch; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.job.open .excerpt { -webkit-line-clamp: unset; display: block; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; font-size: 13px; }
 .tag { padding: 2px 9px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); }
 .tag.field { background: var(--brand-soft); border-color: transparent; font-weight: 600; }
@@ -260,7 +267,7 @@ footer { padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
     if (state.age && daysAgo(j.posted) > state.age) return false;
     for (var i = 0; i < state.perks.length; i++) if (j.perks.indexOf(state.perks[i]) === -1) return false;
     if (state.q) {
-      var hay = [j.title, j.employer, j.cities.join(" "), j.fields.join(" "), j.perks.join(" "), j.excerpt].join(" ").toLowerCase();
+      var hay = [j.title, j.employer, j.cities.join(" "), j.fields.join(" "), j.perks.join(" "), j.excerpt, j.body || ""].join(" ").toLowerCase();
       var words = state.q.toLowerCase().split(/\s+/);
       for (var k = 0; k < words.length; k++) if (hay.indexOf(words[k]) === -1) return false;
     }
@@ -280,7 +287,20 @@ footer { padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
     top.appendChild(head);
     if (age(j) <= 2) top.appendChild(el("span", "new", "חדש"));
     art.appendChild(top);
+    if (j.facts && j.facts.length) {
+      var facts = el("div", "facts");
+      j.facts.forEach(function (f) { var sp = el("span"); sp.appendChild(el("b", null, f.k + ":")); sp.appendChild(document.createTextNode(f.v)); facts.appendChild(sp); });
+      art.appendChild(facts);
+    }
     if (j.excerpt) art.appendChild(el("p", "excerpt", j.excerpt));
+    var details = el("div", "details");
+    (j.body || j.excerpt || "").split("\n").forEach(function (line) {
+      // short lines that end a sentence with ":" or "?" or name a section are the ad's own headings
+      var heading = line.length < 45 && (/[:?]$/.test(line) || /^(תיאור|דרישות|מה (בתפקיד|כולל|מחכה|אנחנו)|היקף|תנאים|פרטי הגשה|אופן הגשה|כישורים|יתרונות|על החברה|אחריות)/.test(line));
+      details.appendChild(el(heading ? "h4" : "p", null, heading ? line.replace(/:$/, "") : line));
+    });
+    if (!j.body) details.appendChild(el("p", "note", "זה תיאור מקוצר. המודעה המלאה, עם כל הדרישות ופרטי ההגשה, נמצאת באתר המקור."));
+    art.appendChild(details);
     var tags = el("div", "tags");
     j.fields.forEach(function (f) { tags.appendChild(el("span", "tag field", f)); });
     j.perks.forEach(function (p) { tags.appendChild(el("span", "tag", p)); });
@@ -290,11 +310,14 @@ footer { padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
     var a = daysAgo(j.posted);
     foot.appendChild(el("span", "meta", (j.dated ? "פורסם " + ago(a) : "נמצא " + ago(daysAgo(j.first_seen))) + " · " + j.source));
     var actions = el("div", "actions");
-    if (j.excerpt && j.excerpt.length > 140) {
-      var more = el("button", "ghost", "פרטים"); more.type = "button";
-      more.addEventListener("click", function () { var open = art.classList.toggle("open"); more.textContent = open ? "פחות" : "פרטים"; });
-      actions.appendChild(more);
-    }
+    var more = el("button", "ghost", j.body ? "כל הפרטים" : "פרטים"); more.type = "button";
+    more.setAttribute("aria-expanded", "false");
+    more.addEventListener("click", function () {
+      var open = art.classList.toggle("open");
+      more.textContent = open ? "סגירה" : (j.body ? "כל הפרטים" : "פרטים");
+      more.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    actions.appendChild(more);
     var star = el("button", "ghost", saved[j.id] ? "★ שמורה" : "☆ שמירה"); star.type = "button";
     star.setAttribute("aria-pressed", saved[j.id] ? "true" : "false");
     star.addEventListener("click", function () { if (saved[j.id]) delete saved[j.id]; else saved[j.id] = 1; persist(); render(); });

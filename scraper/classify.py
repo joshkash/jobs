@@ -69,8 +69,43 @@ def study_year(full):
     return None
 
 
+def clean_body(body):
+    """The full ad, minus contact details (people apply through the source) and blank runs."""
+    body = PHONE.sub("", EMAIL.sub("", body or ""))
+    body = re.sub(r"https?://\S+", "", body)
+    body = re.split(r"\n(דרושים בתחום|מאפייני משרה|משרות דומות)\n", body)[0]  # board tags after the ad
+    lines = []
+    for l in body.split("\n"):
+        l = re.sub(r"[ \t]+", " ", l).strip(" |")
+        if not l or re.fullmatch(r"[:\-–—•*|]+", l):
+            continue
+        # a lone "!" or "?" or emoji is the tail of the previous line, split off by the source's markup
+        if lines and len(l) <= 2 and not re.search(r"\w", l):
+            lines[-1] += l
+            continue
+        lines.append(l)
+    return "\n".join(lines)[:4000]
+
+
+def key_facts(full):
+    """Hours, deadline and pay, when the ad states them."""
+    facts = []
+    hours = re.search(r"(עד |כ[-־]?)?\d+(\s*[-–]\s*\d+)?\s*שעות\s*(חודשיות|בחודש|שבועיות|בשבוע|ביום)"
+                      r"|\d+(\s*[-–]\s*\d+)?\s*ימים בשבוע|\d+\s*%\s*משרה|\d+(\s*[-–]\s*\d+)?\s*משמרות", full)
+    if hours:
+        facts.append({"k": "היקף", "v": hours.group(0).strip()})
+    deadline = re.search(r"(מועד אחרון|עד לתאריך|הגשה עד)[^\d\n]{0,25}(\d{1,2}[./]\d{1,2}[./]\d{2,4})", full)
+    if deadline:
+        facts.append({"k": "הגשה עד", "v": deadline.group(2)})
+    pay = re.search(r"\d[\d,.]*\s*(-|–|עד)?\s*(\d[\d,.]*)?\s*(₪|ש[\"״]ח)\s*(לשעה|לחודש|ברוטו)?", full)
+    if pay:
+        facts.append({"k": "שכר", "v": pay.group(0).strip()})
+    return facts
+
+
 def classify(raw):
-    full = " ".join([raw["title"], raw.get("employer", ""), raw["text"], " ".join(raw.get("meta", []))])
+    body = clean_body(raw.get("body") or raw["text"])
+    full = " ".join([raw["title"], raw.get("employer", ""), raw["text"], body, " ".join(raw.get("meta", []))])
     cities = list(raw.get("cities") or [])
     for c in CITIES:
         if c in full:
@@ -107,5 +142,7 @@ def classify(raw):
         "perks": perks,
         "year": study_year(full),
         "excerpt": excerpt,
+        "body": body if len(body) > len(excerpt) + 40 else "",  # only when it adds to the summary
+        "facts": key_facts(full),
         "posted": raw.get("posted"),
     }

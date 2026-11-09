@@ -7,6 +7,7 @@ Usage:
 import argparse
 import json
 import sys
+import time
 import traceback
 from datetime import date, timedelta
 from pathlib import Path
@@ -68,6 +69,7 @@ def load():
 def scrape(store):
     today = date.today().isoformat()
     jobs = store["jobs"]
+    detail_budget = 200  # job pages read per run; the rest wait for tomorrow
     for key, src in SOURCES.items():
         try:
             raw = src["fn"]()
@@ -81,8 +83,19 @@ def scrape(store):
             if not is_student_job(r):
                 jobs.pop(r["id"], None)
                 continue
+            old = jobs.get(r["id"], {})
+            if src.get("detail") and not r.get("body"):
+                r["body"] = old.get("raw_body")
+                if r["body"] is None and detail_budget > 0:  # each job page is read once, then kept
+                    detail_budget -= 1
+                    try:
+                        r["body"] = src["detail"](r["url"])
+                        time.sleep(1)
+                    except Exception as e:
+                        print(f"[{key}] could not read {r['url']}: {e}", file=sys.stderr)
             job = classify(r)
-            old = jobs.get(job["id"], {})
+            if r.get("body") is not None:
+                job["raw_body"] = r["body"]
             job["first_seen"] = old.get("first_seen", today)
             job["posted"] = job["posted"] or old.get("posted") or job["first_seen"]
             job["dated"] = bool(r.get("posted")) or old.get("dated", False)
@@ -103,7 +116,8 @@ def scrape(store):
 
 def build(store):
     env = Environment(loader=FileSystemLoader(ROOT / "templates"), autoescape=True)
-    jobs = sorted(store["jobs"].values(), key=lambda j: (j["posted"], j["id"]), reverse=True)
+    jobs = sorted(({k: v for k, v in j.items() if k != "raw_body"} for j in store["jobs"].values()),
+                  key=lambda j: (j["posted"], j["id"]), reverse=True)
     html = env.get_template("index.html").render(
         payload={"updated": store["updated"], "jobs": jobs, "fields": list(FIELDS) + ["כללי"]},
         boards=BOARDS,
